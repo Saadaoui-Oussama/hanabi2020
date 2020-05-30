@@ -32,7 +32,11 @@ public class SimpleGameController {
 			data.addPlayer( createPlayer(data, handSize));
 		}
 		
-		System.out.println(data.getPlayers());
+		while (data.getRedTokens() != 0 || !data.isSetComplete() || data.lastTurn()) {
+			
+		}
+		
+		
 		
 		
 		System.out.println("END");

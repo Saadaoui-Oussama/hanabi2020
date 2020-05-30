@@ -9,6 +9,7 @@ public class SimpleGameData {
 	private int redTokens;
 	private int blueTokens;
 	private ArrayList<Card> deck;
+	private ArrayList<Card> defausse;
 	private List<Player> players;
 	private int nbPlayers;
 	
@@ -81,6 +82,11 @@ public class SimpleGameData {
 
 	public void addPlayer(Player player) {
 		this.players.add(player);
+	}
+
+	public boolean isSetComplete() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

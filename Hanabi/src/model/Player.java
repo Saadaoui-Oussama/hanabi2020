@@ -24,11 +24,11 @@ public class Player {
 	}
 	
 	/** Défausser une carte */
-	public void discardCard(int card_nb) {
+	public void discardCard(SimpleGameData game, int card_nb) {
 		if (card_nb >= 4)
 			throw new IllegalStateException("Cette carte n'est pas dans le deck");	
 		
-		hand[nb_card] = game.draw();
+		hand[card_nb] = game.draw();
 	}
 	
 	@Override
