@@ -49,8 +49,12 @@ public class SimpleGameData {
 	
 	public Card draw() {
 		if (deck.size()<=0)
-			throw new IllegalStateException("Deck vide");	
+			throw new IllegalStateException("Deck vide");
 		return deck.remove(0);
+	}
+	
+	public boolean lastTurn() {
+		return false;
 	}
 	
 	/* Getters/Setters */
@@ -73,6 +77,10 @@ public class SimpleGameData {
 
 	public List<Player> getPlayers() {
 		return players;
+	}
+
+	public void addPlayer(Player player) {
+		this.players.add(player);
 	}
 
 }

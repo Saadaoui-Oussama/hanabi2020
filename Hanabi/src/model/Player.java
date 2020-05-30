@@ -4,21 +4,35 @@ public class Player {
 	
 	private String name;
 	private Card[] hand;
-	private int handSize;
 	
-	public Player(String name, SimpleGameData game) {
+	public Player(String name, SimpleGameData game, int handSize) {
 		this.name = name;
-		this.handSize = game.getNbPlayers();
 		this.hand = new Card[handSize];
-		for (int i=0; i < handSize; i++)
+		for (int i = 0; i < handSize; i++) {
 			hand[i] = game.draw();
+		}
+	}
+	
+	/** Donner une information */
+	public void giveIntel() {
+		
+	}
+	
+	/** Piocher une carte */
+	public void playCard() {
+		
+	}
+	
+	/** Défausser une carte */
+	public void discardCard() {
+		
 	}
 	
 	@Override
 	public String toString() {
 		String val = "Main de "+name+": [";
 		for (Card c : hand)
-			val += c.toString();
+			val += c.toString()+" ";
 		val += "]";
 		return val;
 	}
