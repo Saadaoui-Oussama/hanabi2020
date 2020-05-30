@@ -12,6 +12,8 @@ public class SimpleGameController {
 	private SimpleGameView view;
 	private Scanner saisie;
 	
+	private int nbTours = 0; // Repère de tour
+	
 	public void start() {
 		System.out.println("Bienvenue sur Hanabi !");
 		saisie = new Scanner(System.in);
@@ -32,12 +34,13 @@ public class SimpleGameController {
 			data.addPlayer( createPlayer(data, handSize));
 		}
 		
+		
+		// Boucle du jeu
 		while (data.getRedTokens() != 0 || !data.isSetComplete() || data.lastTurn()) {
+			System.out.println("Tour n°"+nbTours);
 			
+			nbTours++;
 		}
-		
-		
-		
 		
 		System.out.println("END");
 	}

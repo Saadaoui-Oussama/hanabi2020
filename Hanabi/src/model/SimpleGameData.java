@@ -2,25 +2,35 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SimpleGameData {
 	
 	private int redTokens;
 	private int blueTokens;
-	private ArrayList<Card> deck;
-	private ArrayList<Card> defausse;
+	
 	private List<Player> players;
 	private int nbPlayers;
+	
+	private ArrayList<Card> deck;
+	private Map<FireworkColor, ArrayList<Card>> field;
+	private Map<FireworkColor, ArrayList<Card>> defausse;
+	
 	
 	/** Création de la classe gestion de données 
 	 * @param nbPlayers: nombre de joueurs **/
 	public SimpleGameData(int nbPlayers) {
 		this.redTokens = 3;
 		this.blueTokens = 8;
-		this.deck = generateDeck();
+		
 		this.nbPlayers = nbPlayers;
 		this.players = new ArrayList<Player>();
+		
+		this.deck = generateDeck();
+		this.field = generateField();
+		this.defausse = generateField(); // La défausse marche comme un terrain
 	}
 
 	private ArrayList<Card> generateDeck() {
@@ -46,6 +56,16 @@ public class SimpleGameData {
 			Collections.shuffle(deck);
 		}
 		return deck;
+	}
+	
+	private Map<FireworkColor, ArrayList<Card>> generateField() {
+		Map<FireworkColor, ArrayList<Card>> map = new HashMap<FireworkColor, ArrayList<Card>>();
+		
+		for (FireworkColor c : FireworkColor.values()) {
+			map.put(c, new ArrayList<Card>());
+		}
+		
+		return map;
 	}
 	
 	public Card draw() {
@@ -76,6 +96,14 @@ public class SimpleGameData {
 		return deck;
 	}
 
+	public Map<FireworkColor, ArrayList<Card>> getField() {
+		return field;
+	}
+
+	public Map<FireworkColor, ArrayList<Card>> getDefausse() {
+		return defausse;
+	}
+
 	public List<Player> getPlayers() {
 		return players;
 	}
@@ -87,6 +115,12 @@ public class SimpleGameData {
 	public boolean isSetComplete() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public int score() {
+		int score = 0;
+		
+		return score;
 	}
 
 }
