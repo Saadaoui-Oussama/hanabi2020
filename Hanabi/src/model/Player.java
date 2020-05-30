@@ -14,9 +14,9 @@ public class Player {
 	}
 	
 	/** Donner une information */
-	public void addIndColor(FireworkColor color) {
+	public void addIndColor(Player p, FireworkColor color) {
 		Card c = new Card(color, 0);
-		for(Card cd  : this.hand) {
+		for(Card cd  : p.getHand()) {
 			if(cd.sameColor(c))
 				cd.setIndColor();
 		}
@@ -33,18 +33,29 @@ public class Player {
 	
 	/** Défausser une carte */
 	public void discardCard(SimpleGameData game, int card_nb) {
-		if (card_nb >= 4)
-			throw new IllegalStateException("Cette carte n'est pas dans le deck");	
-		
 		hand[card_nb] = game.draw();
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public Card[] getHand() {
+		return hand;
 	}
 	
 	@Override
 	public String toString() {
-		String val = "Main de "+name+": [";
+		String val = "Main de "+name+": | ";
 		for (Card c : hand)
-			val += c.toString()+" ";
-		val += "]";
+			val += c.toString()+" | ";
+		return val;
+	}
+
+	public String openHand() {
+		String val = "Main visible de "+name+": | ";
+		for (Card c : hand)
+			val += c.openCard()+" | ";
 		return val;
 	}
 

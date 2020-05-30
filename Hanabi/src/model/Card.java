@@ -73,9 +73,22 @@ public class Card {
 		return hash;
 	}
 
+	public String openCard() {
+		return "Carte "+ color +" n°"+value;
+	}
+	
 	@Override
 	public String toString() {
-		return "Carte "+color+" n°"+value;
+		String stringColor = "?";
+		String stringValue = "?";
+		
+		if (ind_color)
+			stringColor = color.toString();
+		
+		if (ind_value)
+			stringValue = value+"";
+		
+		return "Carte "+ stringColor +" n°"+ stringValue;
 	}
 
 }
