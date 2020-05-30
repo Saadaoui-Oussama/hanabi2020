@@ -32,7 +32,7 @@ public class Player {
 		Card[] new_hand = new Card[this.handSize-1];
 		for (int i=0; i < this.handSize; i++) {
 			if(i == card_nb) {
-				i++;
+				i++; 
 				new_hand[i-1] = hand[i];
 			}else {
 					new_hand[i] = hand[i];
