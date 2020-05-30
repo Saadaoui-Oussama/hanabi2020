@@ -14,13 +14,21 @@ public class Player {
 	}
 	
 	/** Donner une information */
-	public void giveIntel() {
-		
+	public void addIndColor(FireworkColor color) {
+		Card c = new Card(color, 0);
+		for(Card cd  : this.hand) {
+			if(cd.sameColor(c))
+				cd.setIndColor();
+		}
 	}
 	
 	/** Piocher une carte */
-	public void playCard() {
-		
+	public void playCard(int occurrence) {
+		Card c = new Card(FireworkColor.white, occurrence);
+		for(Card cd  : this.hand) {
+			if(cd.sameValue(c))
+				cd.setIndValue();
+		}
 	}
 	
 	/** Défausser une carte */

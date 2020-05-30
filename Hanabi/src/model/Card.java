@@ -4,18 +4,40 @@ public class Card {
 	
 	private FireworkColor color;
 	private int value;
+	private boolean ind_color;
+	private boolean ind_value;
 	
 	public Card(FireworkColor c, int val) {
 		color = c;
 		value = val;
+		ind_color = false;
+		ind_value = false;
 	}
 	
+	/** Getter */
 	public FireworkColor getColor() {
 		return color;
 	}
 
 	public int getValue() {
 		return value;
+	}
+	
+	public boolean getIndColor() {
+		return ind_color;
+	}
+	
+	public boolean getIndValue() {
+		return ind_value;
+	}
+	
+	/** Setter */
+	public void setIndColor() {
+		this.ind_color = true;
+	}
+	
+	public void setIndValue() {
+		this.ind_value = true;
 	}
 	
 	public boolean sameValue(Card c) {
