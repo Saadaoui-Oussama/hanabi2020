@@ -5,19 +5,21 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SimpleGameData {
 	
+	//TODO listener sur redTokens, field et defausse ?
+	
 	private int redTokens; // Jetons obtenus en jouant une mauvaise carte, a 3 jetons, les joueurs ont perdu
-	//TODO listener sur redTokens
 	private int blueTokens; // Peut être utilisé pour donner un indice - défausser une carte ou compléter une série en génère un
 	
 	private List<Player> players;
 	private int nbPlayers;
 	
 	private ArrayList<Card> deck;
-	private Map<FireworkColor, ArrayList<Card>> field;
-	private Map<FireworkColor, ArrayList<Card>> defausse;
+	private Map<FireworkColor, Integer> field;
+	private Map<FireworkColor, ArrayList<Integer>> discardZone;
 	
 	
 	/** Création de la classe gestion de données 
@@ -31,7 +33,7 @@ public class SimpleGameData {
 		
 		this.deck = generateDeck();
 		this.field = generateField();
-		this.defausse = generateField(); // La défausse marche comme un terrain
+		this.discardZone = generateDiscardZone();
 	}
 
 	private ArrayList<Card> generateDeck() {
@@ -59,11 +61,21 @@ public class SimpleGameData {
 		return deck;
 	}
 	
-	private Map<FireworkColor, ArrayList<Card>> generateField() {
-		Map<FireworkColor, ArrayList<Card>> map = new HashMap<FireworkColor, ArrayList<Card>>();
+	private Map<FireworkColor, Integer> generateField() {
+		Map<FireworkColor, Integer> map = new HashMap<FireworkColor, Integer>();
 		
 		for (FireworkColor c : FireworkColor.values()) {
-			map.put(c, new ArrayList<Card>());
+			map.put(c, 0);
+		}
+		
+		return map;
+	}
+	
+	private Map<FireworkColor, ArrayList<Integer>> generateDiscardZone() {
+		Map<FireworkColor, ArrayList<Integer>> map = new HashMap<FireworkColor, ArrayList<Integer>>();
+		
+		for (FireworkColor c : FireworkColor.values()) {
+			map.put(c, new ArrayList<Integer>(0));
 		}
 		
 		return map;
@@ -99,12 +111,12 @@ public class SimpleGameData {
 		return deck;
 	}
 
-	public Map<FireworkColor, ArrayList<Card>> getField() {
+	public Map<FireworkColor, Integer> getField() {
 		return field;
 	}
 
-	public Map<FireworkColor, ArrayList<Card>> getDefausse() {
-		return defausse;
+	public Map<FireworkColor, ArrayList<Integer>> getDefausse() {
+		return discardZone;
 	}
 
 	public List<Player> getPlayers() {
@@ -132,9 +144,7 @@ public class SimpleGameData {
 
 	public boolean isSetComplete() {
 		for (FireworkColor c : field.keySet()) {
-			if (field.get(c).isEmpty())
-				return false;
-			else if (field.get(c).stream().map(cardo -> cardo.getValue()).max(Integer::compare).get() != 5)
+			if (field.get(c) != 5)
 				return false;
 		}
 		return true;
@@ -143,27 +153,43 @@ public class SimpleGameData {
 	public int score() {
 		int score = 0;
 		for (FireworkColor c : field.keySet()) {
-			if (!field.get(c).isEmpty())
-				score += field.get(c).stream().map(cardo -> cardo.getValue()).max(Integer::compare).get();
+			score += field.get(c);
 		}
 		return score;
 	}
+	
+	public void addToField(Card c) {
+		field.put(c.getColor(), c.getValue());
+	}
 
 	public void addToDefausse(Card c) {
-		ArrayList<Card> itemsList = defausse.get(c.getColor());
-        itemsList.add(c);
-		defausse.put(c.getColor(), itemsList);
+		ArrayList<Integer> itemsList = discardZone.get(c.getColor());
+        itemsList.add(c.getValue());
+		discardZone.put(c.getColor(), itemsList);
 	}
 	
-	public void showDefausse() {
+	public void showField() {
+		System.out.println("FIELD");
+		
+		for (FireworkColor c : field.keySet()) {
+			System.out.println("Couleur "+c+": "+field.get(c));
+		}
+	}
+	
+	public void showDiscardZone() {
 		System.out.println("DEFAUSSE");
 		
-		for (FireworkColor c : defausse.keySet()) {
-			System.out.println("Couleur "+c);
-			for (Card card : defausse.get(c)) {
-				System.out.println(card.openCard()+" ");
+		for (FireworkColor c : discardZone.keySet()) {
+			System.out.print("Couleur "+c+": ");
+			for (int value : discardZone.get(c)) {
+				System.out.print(value+" ");
 			}
+			System.out.println();
 		}
+	}
+
+	public List<Player> getListWithoutPlayer(Player player) {
+		return getPlayers().stream().filter(p -> !p.getName().equals(player.getName())).collect(Collectors.toList());
 	}
 
 }

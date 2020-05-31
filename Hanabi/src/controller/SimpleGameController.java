@@ -78,12 +78,7 @@ public class SimpleGameController {
 	}
 
 	private void turn(Player player) {
-		System.out.println("A ton tour, "+player.getName());
-		System.out.println("Jetons bleus: "+data.getBlueTokens());
-		System.out.println("Jetons rouges: "+data.getRedTokens());
-		System.out.println("Cartes restantes: "+data.getDeck().size());
-		System.out.println(player.toString());
-		data.showDefausse();
+		showInformations(player);
 		
 		int choice = 0;
 		do {
@@ -112,12 +107,36 @@ public class SimpleGameController {
 		default:
 			throw new IllegalStateException("choix action: "+choice);
 		}
+		
+		cleanConsole();
+	}
+
+	/** Fonction très cheap pour nettoyer la console pendant la partie */
+	private void cleanConsole() {
+		for (int i = 0; i < 50; i++)
+			System.out.println();
+	}
+
+	private void showInformations(Player player) {
+		System.out.println("A ton tour, "+player.getName());
+		System.out.println("Jetons bleus: "+data.getBlueTokens());
+		System.out.println("Jetons rouges: "+data.getRedTokens());
+		System.out.println("Cartes restantes: "+data.getDeck().size());
+		
+		// Main des joueurs
+		System.out.println(player.toString());
+		for (Player p : data.getListWithoutPlayer(player))
+			System.out.println(p.openHand());
+		
+		// Affichage du terrain et de la défausse (fonctions de test - à revoir) TODO
+		data.showField();
+		data.showDiscardZone();
 	}
 
 	private void actionGiveIntel(Player player) {
 		int playerSaisie = 0;
 		// On veut travailler avec une liste ou il n'y a pas le joueur actuel (on ne peut pas se donner un indice)
-		List<Player> l = data.getPlayers().stream().filter(p -> !p.getName().equals(player.getName())).collect(Collectors.toList());
+		List<Player> l = data.getListWithoutPlayer(player);
 		do {
 			System.out.println("A quel joueur souhaitez-vous donner un indice ?");
 			Player pIntel;
@@ -148,14 +167,14 @@ public class SimpleGameController {
 		do {
 			System.out.println("Choisissez la carte lié à l'indice");
 			for (int i = 0; i < playerChoice.getHand().size(); i++) {
-				System.out.println((i+1)+". "+playerChoice.getHand().get(i).openCard());
+				System.out.println((i+1)+". "+playerChoice.getCardInHand(i).openCard());
 			}
 			playerSaisie = saisie.nextInt();
 		} while (playerSaisie < 1 || playerSaisie > playerChoice.getHand().size());
 		
 		playerSaisie--;
 		int indexCardChoice = playerSaisie;
-		Card cardChoice = playerChoice.getHand().get(indexCardChoice);
+		Card cardChoice = playerChoice.getCardInHand(indexCardChoice);
 
 		if (intelChoice == 1)
 			playerChoice.addIndColor(cardChoice.getColor());
@@ -170,10 +189,27 @@ public class SimpleGameController {
 		do {
 			System.out.println("Choisissez la carte à jouer");
 			for (int i = 0; i < player.getHand().size(); i++) {
-				System.out.println((i+1)+". "+player.getHand().get(i).openCard());
+				System.out.println((i+1)+". "+player.getCardInHand(i));
 			}
 			playerSaisie = saisie.nextInt();
 		} while (playerSaisie < 1 || playerSaisie > player.getHand().size());
+		
+		playerSaisie--;
+		Card choice = player.discardCard(playerSaisie); // On retire la carte à jouer de la main du joueur
+		
+		player.addCard(data.draw()); // Peu importe le résultat, le joueur repioche une carte (peut se positionner à la fin de la fonction)
+		
+		if (choice.getValue() == data.getField().get(choice.getColor())+1) { // Si la carte est correcte (carte jouée = carte sur terrain + 1)
+			data.addToField(choice);
+			
+			if (choice.getValue() == 5) //Si on complète une pile, on gagne un jeton bleu supplémentaire !
+				data.addBlueToken();
+		}
+		else { // Carte incorrecte, on défausse la carte et on ajoute un jeton rouge
+			data.addToDefausse(choice);
+			data.addRedToken();
+		}
+		
 	}
 	
 	private void actionDiscardCard(Player player) {
@@ -181,13 +217,15 @@ public class SimpleGameController {
 		do {
 			System.out.println("Choisissez la carte à défausser");
 			for (int i = 0; i < player.getHand().size(); i++) {
-				System.out.println((i+1)+". "+player.getHand().get(i).openCard());
+				System.out.println((i+1)+". "+player.getCardInHand(i));
 			}
 			playerSaisie = saisie.nextInt();
 		} while (playerSaisie < 1 || playerSaisie > player.getHand().size());
 		
 		playerSaisie--;
-		player.discardCard(data, playerSaisie);
+		Card discarded = player.discardCard(playerSaisie);
+		data.addToDefausse(discarded);
+		player.addCard(data.draw());
 	}
 
 	private Player createPlayer(int handSize) {

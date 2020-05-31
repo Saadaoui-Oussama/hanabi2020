@@ -37,11 +37,18 @@ public class Player {
 		
 	}
 	
-	/** Défausse une carte et en pioche une exactement après */
-	public void discardCard(SimpleGameData game, int index_card) {
+	/** Défausse une carte et renvoie la carte défaussée*/
+	public Card discardCard(int index_card) {
 		Card discarded = this.hand.remove(index_card);
-		game.addToDefausse(discarded);
-		this.hand.add(game.draw());
+		return discarded;
+	}
+	
+	public void addCard(Card c) {
+		this.hand.add(c);
+	}
+	
+	public Card getCardInHand(int index) {
+		return this.getHand().get(index);
 	}
 	
 	public String getName() {

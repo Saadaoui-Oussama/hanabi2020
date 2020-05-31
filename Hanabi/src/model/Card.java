@@ -75,7 +75,16 @@ public class Card {
 	}
 
 	public String openCard() {
-		return "Carte "+ color +" n°"+value;
+		String stringColor = color.toString();
+		String stringValue = value+"";
+		
+		if (ind_color)
+			stringColor = "("+stringColor+")";
+		
+		if (ind_value)
+			stringValue = "("+stringValue+")";
+		
+		return "Carte "+ stringColor +" n°"+ stringValue;
 	}
 	
 	@Override
