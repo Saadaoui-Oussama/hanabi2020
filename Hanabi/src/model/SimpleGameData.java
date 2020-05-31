@@ -147,8 +147,9 @@ public class SimpleGameData {
 	}
 
 	public void addToDefausse(Card c) {
-		// TODO Auto-generated method stub
-		
+		ArrayList<Card> itemsList = defausse.get(c.getColor());
+        itemsList.add(c);
+		defausse.put(c.getColor(), itemsList);
 	}
 
 }
