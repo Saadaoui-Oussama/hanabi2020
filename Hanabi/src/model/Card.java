@@ -4,7 +4,7 @@ public class Card {
 	
 	private FireworkColor color;
 	private int value;
-	private boolean ind_color;
+	private boolean ind_color; // Permet de savoir si l'indice sur la valeur/couleur a été donné
 	private boolean ind_value;
 	
 	public Card(FireworkColor c, int val) {
@@ -38,19 +38,6 @@ public class Card {
 	
 	public void giveIndValue() {
 		this.ind_value = true;
-	}
-	
-	// TODO supprimer ?
-	public boolean sameValue(Card c) {
-		if (this.getValue() == c.getValue())
-			return true;
-		return false;
-	}
-	
-	public boolean sameColor(Card c) {
-		if (this.getColor().equals(c.getColor()))
-			return true;
-		return false;
 	}
 	
 	@Override

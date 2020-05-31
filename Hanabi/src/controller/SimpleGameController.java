@@ -32,14 +32,12 @@ public class SimpleGameController {
 		
 		for (int i = 1; i <= nbPlayers; i++) {
 			System.out.println("Création du joueur n°"+i);
-			data.addPlayer( createPlayer(handSize));
+			Player p = createPlayer(handSize);
+			data.addPlayer(p);
 		}
 		
 		// Boucle du jeu
 		while (data.getRedTokens() != 3 && !data.isSetComplete()) {
-			if (data.lastTurn())
-				System.out.println("LAST TURN !");
-			
 			System.out.println("Tour n°"+nbTours);
 			
 			for (Player p : data.getPlayers()) {
@@ -53,6 +51,10 @@ public class SimpleGameController {
 				break;
 		}
 		
+		endGame();
+	}
+
+	private void endGame() {
 		if (data.getRedTokens() == 3) 
 			System.out.println("Vous avez PERDU");
 		else {
@@ -71,8 +73,9 @@ public class SimpleGameController {
 				System.out.println("Extraordinaire, restera gravée dans les mémoires !");
 			else
 				System.out.println("Légendaire, petits et grands sans voix,  des étoiles dans les yeux");
+			
+			System.out.println("A bientôt !");
 		}
-		System.out.println("A bientôt !");
 	}
 
 	private void turn(Player player) {
@@ -103,19 +106,21 @@ public class SimpleGameController {
 		break;
 		
 		default:
-			throw new IllegalStateException("choix action: "+choice);
+			throw new IllegalStateException("choix action: "+choice); // On n'est jamais censé arrivé la
 		}
 		
 		cleanConsole();
 	}
 
-	/** Fonction très cheap pour nettoyer la console pendant la partie */
+	/** Fonction très "cheap" pour nettoyer la console à chaque nouveau tour pendant la partie */
 	private void cleanConsole() {
 		for (int i = 0; i < 50; i++)
 			System.out.println();
 	}
 
 	private void showInformations(Player player) {
+		if (data.lastTurn())
+			System.out.println("LAST TURN !");
 		System.out.println("A ton tour, "+player.getName());
 		System.out.println("Jetons bleus: "+data.getBlueTokens());
 		System.out.println("Jetons rouges: "+data.getRedTokens());
@@ -126,7 +131,7 @@ public class SimpleGameController {
 		for (Player p : data.getListWithoutPlayer(player))
 			System.out.println(p.openHand());
 		
-		// Affichage du terrain et de la défausse (fonctions de test - à revoir) TODO
+		// Affichage du terrain et de la défausse (fonctions de test - à mieux redéfinir pour phase 3 ?) TODO
 		data.showField();
 		data.showDiscardZone();
 	}
@@ -195,9 +200,7 @@ public class SimpleGameController {
 		playerSaisie--;
 		Card choice = player.discardCard(playerSaisie); // On retire la carte à jouer de la main du joueur
 		
-		player.addCard(data.draw()); // Peu importe le résultat, le joueur repioche une carte (peut se positionner à la fin de la fonction)
-		
-		if (choice.getValue() == data.getField().get(choice.getColor())+1) { // Si la carte est correcte (carte jouée = carte sur terrain + 1)
+		if (choice.getValue() == data.getField().get(choice.getColor()) + 1) { // Si la carte est correcte (carte jouée = carte sur terrain + 1)
 			data.addToField(choice);
 			
 			if (choice.getValue() == 5) //Si on complète une pile, on gagne un jeton bleu supplémentaire !
@@ -207,6 +210,8 @@ public class SimpleGameController {
 			data.addToDefausse(choice);
 			data.addRedToken();
 		}
+		
+		player.addCard(data.draw()); // Peu importe le résultat, le joueur repioche une carte (peut se positionner juste après Card choice)
 		
 	}
 	
@@ -230,8 +235,8 @@ public class SimpleGameController {
 		String nom;
 		boolean correct_name;
 		
+		System.out.print("Nom du joueur: ");
 		do {
-			System.out.print("Nom du joueur: ");
 			correct_name = true;
 			nom = saisie.nextLine();
 			
