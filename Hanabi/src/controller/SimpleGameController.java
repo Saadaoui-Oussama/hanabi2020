@@ -50,20 +50,31 @@ public class SimpleGameController {
 					break;
 			}
 			
-			
-			
 			nbTours++;
 			if (data.lastTurn())
 				break;
 		}
 		
-		if (data.getRedTokens() == 3)
+		if (data.getRedTokens() == 3) 
 			System.out.println("Vous avez PERDU");
-		
-		if (data.lastTurn())
-			System.out.println("Calcul du score: "+data.score());
-		
-		System.out.println("END");
+		else {
+			int scoreFinal = data.score();
+			System.out.println("Calcul du score: "+scoreFinal);
+	
+			if (scoreFinal <= 5)
+				System.out.println("Horrible, huées de la foule...");
+			else if (scoreFinal >= 6 && scoreFinal <= 10)
+				System.out.println("Médiocre, à peine quelques applaudissements.");
+			else if (scoreFinal >= 11 && scoreFinal <= 15)
+				System.out.println("Honorable, mais ne restera  pas dans les mémoires...");
+			else if(scoreFinal >= 16 && scoreFinal <= 20)
+				System.out.println("Excellente, ravit la foule.");
+			else if(scoreFinal >= 21 && scoreFinal <= 24)
+				System.out.println("Extraordinaire, restera gravée dans les mémoires !");
+			else
+				System.out.println("Légendaire, petits et grands sans voix,  des étoiles dans les yeux");
+		}
+		System.out.println("A bientôt !");
 	}
 
 	private void turn(Player player) {
@@ -72,6 +83,7 @@ public class SimpleGameController {
 		System.out.println("Jetons rouges: "+data.getRedTokens());
 		System.out.println("Cartes restantes: "+data.getDeck().size());
 		System.out.println(player.toString());
+		data.showDefausse();
 		
 		int choice = 0;
 		do {
@@ -88,17 +100,17 @@ public class SimpleGameController {
 		case 1:
 			actionGiveIntel(player);
 		break;
-		
-		case 2:
 			
+		case 2:
+			actionPlayCard(player);
 		break;
 		
 		case 3:
-			
+			actionDiscardCard(player);
 		break;
 		
 		default:
-		break;
+			throw new IllegalStateException("choix action: "+choice);
 		}
 	}
 
@@ -151,7 +163,31 @@ public class SimpleGameController {
 			playerChoice.addIndValue(cardChoice.getValue());
 		
 		data.removeBlueToken();
+	}
+	
+	private void actionPlayCard(Player player) {
+		int playerSaisie = 0;
+		do {
+			System.out.println("Choisissez la carte à jouer");
+			for (int i = 0; i < player.getHand().size(); i++) {
+				System.out.println((i+1)+". "+player.getHand().get(i).openCard());
+			}
+			playerSaisie = saisie.nextInt();
+		} while (playerSaisie < 1 || playerSaisie > player.getHand().size());
+	}
+	
+	private void actionDiscardCard(Player player) {
+		int playerSaisie = 0;
+		do {
+			System.out.println("Choisissez la carte à défausser");
+			for (int i = 0; i < player.getHand().size(); i++) {
+				System.out.println((i+1)+". "+player.getHand().get(i).openCard());
+			}
+			playerSaisie = saisie.nextInt();
+		} while (playerSaisie < 1 || playerSaisie > player.getHand().size());
 		
+		playerSaisie--;
+		player.discardCard(data, playerSaisie);
 	}
 
 	private Player createPlayer(int handSize) {

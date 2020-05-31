@@ -131,18 +131,21 @@ public class SimpleGameData {
 	}
 
 	public boolean isSetComplete() {
-		// TODO Auto-generated method stub
-		return false;
+		for (FireworkColor c : field.keySet()) {
+			if (field.get(c).isEmpty())
+				return false;
+			else if (field.get(c).stream().map(cardo -> cardo.getValue()).max(Integer::compare).get() != 5)
+				return false;
+		}
+		return true;
 	}
 	
 	public int score() {
 		int score = 0;
-		
 		for (FireworkColor c : field.keySet()) {
 			if (!field.get(c).isEmpty())
 				score += field.get(c).stream().map(cardo -> cardo.getValue()).max(Integer::compare).get();
 		}
-		
 		return score;
 	}
 
@@ -150,6 +153,17 @@ public class SimpleGameData {
 		ArrayList<Card> itemsList = defausse.get(c.getColor());
         itemsList.add(c);
 		defausse.put(c.getColor(), itemsList);
+	}
+	
+	public void showDefausse() {
+		System.out.println("DEFAUSSE");
+		
+		for (FireworkColor c : defausse.keySet()) {
+			System.out.println("Couleur "+c);
+			for (Card card : defausse.get(c)) {
+				System.out.println(card.openCard()+" ");
+			}
+		}
 	}
 
 }

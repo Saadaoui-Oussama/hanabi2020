@@ -38,8 +38,8 @@ public class Player {
 	}
 	
 	/** Défausse une carte et en pioche une exactement après */
-	public void discardCard(SimpleGameData game, Card c) {
-		Card discarded = this.hand.remove(hand.indexOf(c));
+	public void discardCard(SimpleGameData game, int index_card) {
+		Card discarded = this.hand.remove(index_card);
 		game.addToDefausse(discarded);
 		this.hand.add(game.draw());
 	}
