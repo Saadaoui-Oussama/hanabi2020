@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class SimpleGameData {
 	
-	private int redTokens;
-	private int blueTokens;
+	private int redTokens; // Jetons obtenus en jouant une mauvaise carte, a 3 jetons, les joueurs ont perdu
+	//TODO listener sur redTokens
+	private int blueTokens; // Peut être utilisé pour donner un indice - défausser une carte ou compléter une série en génère un
 	
 	private List<Player> players;
 	private int nbPlayers;
@@ -23,7 +23,7 @@ public class SimpleGameData {
 	/** Création de la classe gestion de données 
 	 * @param nbPlayers: nombre de joueurs **/
 	public SimpleGameData(int nbPlayers) {
-		this.redTokens = 3;
+		this.redTokens = 0;
 		this.blueTokens = 8;
 		
 		this.nbPlayers = nbPlayers;
@@ -76,6 +76,8 @@ public class SimpleGameData {
 	}
 	
 	public boolean lastTurn() {
+		if (deck.size() == 0)
+			return true;
 		return false;
 	}
 	
@@ -112,6 +114,21 @@ public class SimpleGameData {
 	public void addPlayer(Player player) {
 		this.players.add(player);
 	}
+	
+	public void addBlueToken() {
+		if (blueTokens < 8)
+			this.blueTokens++;
+	}
+	
+	public void removeBlueToken() {
+		if (blueTokens > 0)
+			this.blueTokens--;
+	}
+	
+	public void addRedToken() {
+		if (redTokens < 3)
+			this.redTokens++;
+	}
 
 	public boolean isSetComplete() {
 		// TODO Auto-generated method stub
@@ -121,11 +138,17 @@ public class SimpleGameData {
 	public int score() {
 		int score = 0;
 		
-		for (Entry<FireworkColor, ArrayList<Card>> c : field.entrySet()) {
-			
+		for (FireworkColor c : field.keySet()) {
+			if (!field.get(c).isEmpty())
+				score += field.get(c).stream().map(cardo -> cardo.getValue()).max(Integer::compare).get();
 		}
 		
 		return score;
+	}
+
+	public void addToDefausse(Card c) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

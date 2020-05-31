@@ -1,46 +1,54 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
 	
 	private String name;
-	private Card[] hand;
+	private List<Card> hand;
 	
 	public Player(String name, SimpleGameData game, int handSize) {
 		this.name = name;
-		this.hand = new Card[handSize];
+		this.hand = new ArrayList<Card>();
 		for (int i = 0; i < handSize; i++) {
-			hand[i] = game.draw();
+			hand.add(game.draw());
 		}
 	}
 	
-	/** Donner une information */
-	public void addIndColor(Player p, FireworkColor color) {
-		Card c = new Card(color, 0);
-		for(Card cd  : p.getHand()) {
-			if(cd.sameColor(c))
-				cd.setIndColor();
+	/** Donner une information de couleur */
+	public void addIndColor(FireworkColor color) {
+		for(Card cd  : getHand()) {
+			if(cd.getColor().equals(color))
+				cd.giveIndColor();
+		}
+	}
+	
+	/** Donner une information de valeur */
+	public void addIndValue(int value) {
+		for(Card cd  : getHand()) {
+			if(cd.getValue() == value)
+				cd.giveIndValue();
 		}
 	}
 	
 	/** Piocher une carte */
 	public void playCard(int occurrence) {
-		Card c = new Card(FireworkColor.white, occurrence);
-		for(Card cd  : this.hand) {
-			if(cd.sameValue(c))
-				cd.setIndValue();
-		}
+		
 	}
 	
-	/** Défausser une carte */
-	public void discardCard(SimpleGameData game, int card_nb) {
-		hand[card_nb] = game.draw();
+	/** Défausse une carte et en pioche une exactement après */
+	public void discardCard(SimpleGameData game, Card c) {
+		Card discarded = this.hand.remove(hand.indexOf(c));
+		game.addToDefausse(discarded);
+		this.hand.add(game.draw());
 	}
 	
 	public String getName() {
 		return name;
 	}
 
-	public Card[] getHand() {
+	public List<Card> getHand() {
 		return hand;
 	}
 	

@@ -31,15 +31,16 @@ public class Card {
 		return ind_value;
 	}
 	
-	/** Setter */
-	public void setIndColor() {
+	/** Active l'indice */
+	public void giveIndColor() {
 		this.ind_color = true;
 	}
 	
-	public void setIndValue() {
+	public void giveIndValue() {
 		this.ind_value = true;
 	}
 	
+	// TODO supprimer ?
 	public boolean sameValue(Card c) {
 		if (this.getValue() == c.getValue())
 			return true;
