@@ -2,12 +2,10 @@ package controller;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import model.Card;
 import model.Player;
 import model.SimpleGameData;
-import view.SimpleGameView;
 
 public class SimpleGameController {
 	
@@ -143,7 +141,7 @@ public class SimpleGameController {
 			
 			for (int i = 0; i < l.size(); i++) {
 				pIntel = l.get(i);
-				System.out.println((i+1)+". "+pIntel.getName()+": "+pIntel.openHand());
+				System.out.println((i+1)+". "+pIntel.openHand());
 			}
 			
 			playerSaisie = saisie.nextInt();
