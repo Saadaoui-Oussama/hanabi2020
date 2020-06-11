@@ -3,7 +3,6 @@ package view;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
@@ -17,63 +16,69 @@ import model.SimpleGameData;
 
 public class SimpleGameView {
 	
-	ApplicationContext context;
 	private float XPlayerOrigin = 0;
 	private float YPlayerOrigin  = 0;
-	float width ; 
-	float height; 
 	
-	public SimpleGameView(ApplicationContext context) {
-		this.context = context;
-		this.width = context.getScreenInfo().getWidth();
-		this.height = context.getScreenInfo().getHeight();
-	}
 	
-	private void showMenu() {
-		context.renderFrame(graphics -> {
-			drawMenu(graphics);
-		});
-	}
-	
-	private void showField() {
-		context.renderFrame(graphics -> {
-			drawField(graphics);
-		});
-	}
-	
-	private void drawMenu(Graphics2D graphics) {
-
+	private void drawMenu(ApplicationContext context) {
+		float width = context.getScreenInfo().getWidth();
+		float height = context.getScreenInfo().getHeight();
+		
+    	context.renderFrame(graphics -> {
     		graphics.setColor(Color.RED);
-    		graphics.draw(new Rectangle.Float(0, height/4, width/3, height/4));
+    		Rectangle2D play_bp = new Rectangle2D.Float(0, height/4, width/3, height/4);
+    		graphics.fill(play_bp);
     		graphics.setColor(Color.BLUE);
-    		graphics.draw(new Rectangle.Float(width/3, height/4, width/3, height/4));
+    		Rectangle2D indice_bp = new Rectangle2D.Float(width/3, height/4, width/3, height/4);
+    		graphics.fill(indice_bp);
     		graphics.setColor(Color.GREEN);
-    		graphics.draw(new Rectangle.Float((width/3)*2, height/4, width/3, height/4));
-
+    		Rectangle2D discard_bp = new Rectangle2D.Float((width/3)*2, height/4, width/3, height/4);
+    		graphics.fill(discard_bp);
+    	});
 	}
 	
-	private void drawField(Graphics2D graphics) {
+	
+	private void drawField(ApplicationContext context) {
+		float width = context.getScreenInfo().getWidth();
+		float height = context.getScreenInfo().getHeight();
+		
+    	context.renderFrame(graphics -> {
     		graphics.setColor(Color.GRAY);
-    		graphics.draw(new Rectangle.Float(0, 0, width/2, height/4));
-
+    		Rectangle2D Field = new Rectangle2D.Float(0, 0, width/2, height/4);
+    		graphics.fill(Field);
+    	});
 	}
 	
-	private void drawDiscardZone(Graphics2D graphics) {
+	private void drawDiscardZone(ApplicationContext context) {
+		float width = context.getScreenInfo().getWidth();
+		float height = context.getScreenInfo().getHeight();
+		
+    	context.renderFrame(graphics -> {
     		graphics.setColor(Color.ORANGE);
-    		graphics.draw(new Rectangle.Float(width/2, 0, width/2, height/4));
+    		Rectangle2D DiscardZone = new Rectangle2D.Float(width/2, 0, width/2, height/4);
+    		graphics.fill(DiscardZone);
+    	});
 	}
 	
-	private void drawPlayer(Graphics2D graphics, SimpleGameData data) {	
+	private void drawPlayer(ApplicationContext context, SimpleGameData data) {
+		float width = context.getScreenInfo().getWidth();
+		float height = context.getScreenInfo().getHeight();
+		
 		YPlayerOrigin = height-(height/4);
 		
+    	context.renderFrame(graphics -> {
     		for(var i=0; i < data.getNbPlayers(); i++) {
     			graphics.setColor(Color.cyan);
-    			graphics.draw(new Rectangle.Float(0, YPlayerOrigin, (width/5), height));
+        		Rectangle2D Field = new Rectangle2D.Float(0, YPlayerOrigin, (width/5), height);
+        		graphics.fill(Field);
         		XPlayerOrigin = XPlayerOrigin + (width/5);
     		}
+    	});
 	}
 	
-	private void drawCard(Graphics2D graphics, List<Card> hand) {
+	private void drawCard(ApplicationContext context, List<Card> hand) {
+		
+		context.renderFrame(graphics -> {		
 			for(Card cd : hand) {
 				switch(cd.getColor()) {
 				
@@ -107,34 +112,26 @@ public class SimpleGameView {
 					graphics.drawString(String.valueOf(cd.getValue()), 0, 0);  // TODO mettre les bonnes coordonnées 
 					break;
 				}
+
 			}
+		});
 	}
 	
-	private void printBlueTokens(Graphics2D graphics, int tokens) {
+	private void printBlueTokens(ApplicationContext context, int tokens) {
+		context.renderFrame(graphics -> {	
 			for(var i=0; i < tokens; i++) {
     			graphics.setColor(Color.BLUE);
-        		graphics.draw(new Ellipse2D.Float());  // TODO mettre les coordonnées
+    			Ellipse2D Field = new Ellipse2D.Float();  //TODO
+        		graphics.fill(Field);
+        		XPlayerOrigin = XPlayerOrigin + (width/5);
     		}
+		});
 	}
 	
-	private void printRedTokens(Graphics2D graphics, int tokens) {
-
-			for(var i=0; i < tokens; i++) {
-    			graphics.setColor(Color.RED);
-        		graphics.draw(new Ellipse2D.Float());  // TODO mettre les coordonnées
-    		}
+	private void printRedTokens(ApplicationContext context, int tokens) {
+		
 	}
 	
-	private void printWin(Graphics2D graphics) {
-			graphics.setColor(Color.YELLOW);
-			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-			graphics.drawString("YOU WIN ! \n WELL PLAY !", width/3+(width/3/2), height/2);  // TODO mettre les bonnes coordonnées 
-	}
 	
-	private void printLose(Graphics2D graphics) {
-			graphics.setColor(Color.RED);
-			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-			graphics.drawString("YOU LOSE ... \n TRY AGAIN !", width/3+(width/3/2), height/2);  // TODO mettre les bonnes coordonnées 
-	}
 	
 }
