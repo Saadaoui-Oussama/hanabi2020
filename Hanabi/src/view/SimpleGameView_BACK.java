@@ -8,6 +8,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.util.List;
 
+import fr.umlv.zen5.Application;
 import fr.umlv.zen5.ApplicationContext;
 import model.Card;
 import model.FireworkColor;
@@ -134,4 +135,10 @@ public class SimpleGameView {
 	
 	
 	
+	Application.run(Color.BLACK, context -> {
+        SimpleGameView view = new SimpleGameView(context);
+        view.showField();
+        view.showMenu();
+
+    });
 }

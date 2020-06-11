@@ -29,13 +29,13 @@ public class SimpleGameView {
 		this.height = context.getScreenInfo().getHeight();
 	}
 	
-	private void showMenu() {
+	public void showMenu() {
 		context.renderFrame(graphics -> {
 			drawMenu(graphics);
 		});
 	}
 	
-	private void showField() {
+	public void showField() {
 		context.renderFrame(graphics -> {
 			drawField(graphics);
 		});
@@ -51,7 +51,7 @@ public class SimpleGameView {
     		graphics.draw(new Rectangle.Float((width/3)*2, height/4, width/3, height/4));
 
 	}
-	
+	 
 	private void drawField(Graphics2D graphics) {
     		graphics.setColor(Color.GRAY);
     		graphics.draw(new Rectangle.Float(0, 0, width/2, height/4));
@@ -110,14 +110,14 @@ public class SimpleGameView {
 			}
 	}
 	
-	private void printBlueTokens(Graphics2D graphics, int tokens) {
+	public void printBlueTokens(Graphics2D graphics, int tokens) {
 			for(var i=0; i < tokens; i++) {
     			graphics.setColor(Color.BLUE);
         		graphics.draw(new Ellipse2D.Float());  // TODO mettre les coordonnées
     		}
 	}
 	
-	private void printRedTokens(Graphics2D graphics, int tokens) {
+	public void printRedTokens(Graphics2D graphics, int tokens) {
 
 			for(var i=0; i < tokens; i++) {
     			graphics.setColor(Color.RED);
@@ -125,13 +125,13 @@ public class SimpleGameView {
     		}
 	}
 	
-	private void printWin(Graphics2D graphics) {
+	public void printWin(Graphics2D graphics) {
 			graphics.setColor(Color.YELLOW);
 			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 			graphics.drawString("YOU WIN ! \n WELL PLAY !", width/3+(width/3/2), height/2);  // TODO mettre les bonnes coordonnées 
 	}
 	
-	private void printLose(Graphics2D graphics) {
+	public void printLose(Graphics2D graphics) {
 			graphics.setColor(Color.RED);
 			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 			graphics.drawString("YOU LOSE ... \n TRY AGAIN !", width/3+(width/3/2), height/2);  // TODO mettre les bonnes coordonnées 

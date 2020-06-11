@@ -1,11 +1,14 @@
 package controller;
 
+import java.awt.Color;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.umlv.zen5.Application;
 import model.Card;
 import model.Player;
 import model.SimpleGameData;
+import view.SimpleGameView;
 
 public class SimpleGameController {
 	
