@@ -41,6 +41,24 @@ public class SimpleGameView {
 		});
 	}
 	
+	public void showDiscardZone() {
+		context.renderFrame(graphics -> {
+			drawDiscardZone(graphics);
+		});
+	}
+	
+	public void showPlayer(SimpleGameData data) {
+		context.renderFrame(graphics -> {
+			drawPlayer(graphics, data);
+		});
+	}
+	
+	public void showCards(List<Card> hand) {
+		context.renderFrame(graphics -> {
+			drawCard(graphics, hand);
+		});
+	}
+	
 	private void drawMenu(Graphics2D graphics) {
 
     		graphics.setColor(Color.RED);
