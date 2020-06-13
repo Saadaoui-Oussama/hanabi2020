@@ -1,14 +1,33 @@
 package main;
-import java.awt.Color;
+import java.util.Scanner;
 
-import controller.SimpleGameController;
-import fr.umlv.zen5.Application;
+import controller.SimpleGameControllerConsole;
 
 public class Main {
 	public static void main(String[] args) {
-		SimpleGameController game = new SimpleGameController();
-		game.start();
 		
+		Scanner saisie = new Scanner(System.in);;
+
+		int gameChoice = 0;
+		do {
+			System.out.println("Quel mode d'affichage souhaitez-vous ?");
+			System.out.println("1. Console || 2. Graphique");
+			gameChoice = saisie.nextInt();
+		} while (gameChoice < 1 || gameChoice > 2);
+		
+		
+		
+		
+		if (gameChoice == 1) {
+			SimpleGameControllerConsole game = new SimpleGameControllerConsole();
+			game.start();
+		}
+		else {
+			System.out.println("Version graphique en dev");
+		}
+		
+		saisie.close();
+			
 	}
 }
  

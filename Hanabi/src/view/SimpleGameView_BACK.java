@@ -15,7 +15,7 @@ import model.FireworkColor;
 import model.Player;
 import model.SimpleGameData;
 
-public class SimpleGameView {
+public class SimpleGameView_BACK {
 	
 	private float XPlayerOrigin = 0;
 	private float YPlayerOrigin  = 0;
@@ -136,7 +136,7 @@ public class SimpleGameView {
 	
 	
 	Application.run(Color.BLACK, context -> {
-        SimpleGameView view = new SimpleGameView(context);
+        SimpleGameView_BACK view = new SimpleGameView_BACK(context);
         view.showField();
         view.showMenu();
 
