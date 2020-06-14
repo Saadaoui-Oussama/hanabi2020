@@ -32,6 +32,7 @@ public class SimpleGameView {
 	public void showMenu() {
 		context.renderFrame(graphics -> {
 			drawMenu(graphics);
+			
 		});
 	}
 	
@@ -53,9 +54,33 @@ public class SimpleGameView {
 		});
 	}
 	
+	public void showTokens(SimpleGameData data) {
+		context.renderFrame(graphics -> {
+			printBlueTokens(graphics, data.getBlueTokens());
+			printRedTokens(graphics, data.getRedTokens());
+		});
+	}
+	
 	public void showCards(List<Card> hand) {
 		context.renderFrame(graphics -> {
 			drawCard(graphics, hand);
+		});
+	}
+	public void showTurn(int nb) {
+		String str = "Tour " + nb + " :";
+		context.renderFrame(graphics -> {
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+			graphics.drawString(str, width/4+width/6, height/2+40);
+		});
+	}
+	
+	public void showTurnName(String name) {
+		String str = "A " + name + " de jouer !";
+		context.renderFrame(graphics -> {
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+			graphics.drawString(str, width/2-60, height/2+40);
 		});
 	}
 	
@@ -109,7 +134,7 @@ public class SimpleGameView {
 					graphics.setColor(Color.WHITE);
 					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
 					XCard = XCard+60;
 					break;
 				
@@ -117,7 +142,7 @@ public class SimpleGameView {
 					graphics.setColor(Color.BLUE);
 					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
 					XCard = XCard+60;
 					break;
 				
@@ -125,7 +150,7 @@ public class SimpleGameView {
 					graphics.setColor(Color.YELLOW);
 					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
 					XCard = XCard+60;
 					break;
 					
@@ -133,7 +158,7 @@ public class SimpleGameView {
 					graphics.setColor(Color.RED);
 					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
 					XCard = XCard+60;
 					break;
 					
@@ -141,7 +166,7 @@ public class SimpleGameView {
 					graphics.setColor(Color.GREEN);
 					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
 					XCard = XCard+60;
 					break;
 				}
@@ -149,30 +174,45 @@ public class SimpleGameView {
 	}
 	
 	public void printBlueTokens(Graphics2D graphics, int tokens) {
-			for(var i=0; i < tokens; i++) {
-    			graphics.setColor(Color.BLUE);
-        		graphics.draw(new Ellipse2D.Float());  // TODO mettre les coordonnées
-    		}
+		float X = (width - width/4) - 100;
+		float Y = height/2+100;
+		
+		for(var i=0; i < tokens; i++) {
+			graphics.setColor(Color.BLUE);
+        	graphics.draw(new Ellipse2D.Float(X, Y, 50, 50));
+        	X = X +60;
+    	}
 	}
 	
 	public void printRedTokens(Graphics2D graphics, int tokens) {
-
-			for(var i=0; i < tokens; i++) {
-    			graphics.setColor(Color.RED);
-        		graphics.draw(new Ellipse2D.Float());  // TODO mettre les coordonnées
-    		}
+		float X = (width - width/4) - 100;
+		float Y = height/2+40;
+		
+		for(var i=0; i < tokens; i++) {
+			graphics.setColor(Color.BLUE);
+        	graphics.draw(new Ellipse2D.Float(X, Y, 50, 50));
+        	X = X +60;
+    	}
 	}
 	
 	public void printWin(Graphics2D graphics) {
-			graphics.setColor(Color.YELLOW);
-			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-			graphics.drawString("YOU WIN ! \n WELL PLAY !", width/3+(width/3/2), height/2);  // TODO mettre les bonnes coordonnées 
+		clearWin(context);
+		graphics.setColor(Color.YELLOW);
+		graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+		graphics.drawString("YOU WIN ! \n WELL PLAY !", width/2, height/2-400);  // TODO mettre les bonnes coordonnées 
 	}
 	
 	public void printLose(Graphics2D graphics) {
-			graphics.setColor(Color.RED);
-			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-			graphics.drawString("YOU LOSE ... \n TRY AGAIN !", width/3+(width/3/2), height/2);  // TODO mettre les bonnes coordonnées 
+		clearWin(context);
+		graphics.setColor(Color.RED);
+		graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+		graphics.drawString("YOU LOSE ... \n TRY AGAIN !", width/2, height/2-400);  // TODO mettre les bonnes coordonnées 
+	}
+	
+	public void clearWin(ApplicationContext context) {
+		context.renderFrame(graphics -> {
+			graphics.clearRect(0,0, (int) width+1, (int) height+1);
+		});
 	}
 	
 	
