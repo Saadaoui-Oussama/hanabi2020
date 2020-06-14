@@ -53,7 +53,6 @@ public class SimpleGameData {
 				}
 			}
 		}
-		System.out.println(deck);
 		Collections.shuffle(deck);
 		return deck;
 	}
