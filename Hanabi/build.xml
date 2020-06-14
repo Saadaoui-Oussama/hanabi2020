@@ -8,21 +8,17 @@
 
     <property name="src.dir" value="src"/>
     <property name="classes.dir" value="classes"/>
-    <property name="jar.dir" value="jar"/>
     <property name="main-class" value="main.Main"/>
 
     <target name="compile" depends="clean">
-        <mkdir dir="${classes.dir}"/>
-        <javac destdir="${classes.dir}">
+        <javac includeantruntime="false" destdir="${classes.dir}">
             <src path="${src.dir}"/>
             <classpath refid="build.classpath"/>
         </javac>
-
     </target>
 
     <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/Hanabi.jar" basedir="${classes.dir}">
+        <jar destfile="Hanabi.jar" basedir="${classes.dir}">
             <zipgroupfileset dir="lib" includes="zen5.jar" />
             <manifest>
                 <attribute name="Main-Class" value="${main-class}"/>
@@ -31,12 +27,15 @@
     </target>
 
     <target name="javadoc">
-       <javadoc sourcepath="${src.dir}" destdir="docs/doc" classpathref="build.classpath"/>
+       <javadoc sourcepath="${src.dir}" destdir="docs/javadoc" classpathref="build.classpath"/>
     </target>
 
     <target name="clean">
-        <delete dir="${classes.dir}"/>
-        <delete dir="${jar.dir}"/>
+        <delete includeemptydirs="true">
+            <fileset dir="${classes.dir}" includes="**/*"/>
+        </delete>
+        <delete file="Hanabi.jar"/>
+        <delete dir="docs/javadoc"/>
     </target>
 
 </project>

@@ -46,7 +46,7 @@ public class Player {
 	}
 	
 	/** Add a card to the player's hand
-	 * @param c - Card added to the hand*/
+	 * @param card - Card added to the hand*/
 	public void addCard(Card card) {
 		if (card != null)
 			this.hand.add(card);

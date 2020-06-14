@@ -31,7 +31,7 @@ public class SimpleGameViewConsole {
 	}
 	
 	public void showField() {
-		System.out.println("FIELD");
+		System.out.println("Field:");
 		
 		for (FireworkColor c : data.getField().keySet()) {
 			System.out.println("Couleur "+c+": "+data.getField().get(c));
@@ -39,7 +39,7 @@ public class SimpleGameViewConsole {
 	}
 	
 	public void showDiscardZone() {
-		System.out.println("DEFAUSSE");
+		System.out.println("Discard zone:");
 		
 		for (FireworkColor c : data.getDiscardZone().keySet()) {
 			System.out.print("Couleur "+c+": ");

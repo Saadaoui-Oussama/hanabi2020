@@ -21,7 +21,7 @@ public class SimpleGameControllerConsole {
 		int nbPlayers = 0;
 		do {
 			System.out.println(" Veuillez entrer le nombre de joueurs (2 à 5 joueurs): ");
-			nbPlayers = saisie.nextInt();
+			nbPlayers = inputNumber();
 		} while (nbPlayers < 2 || nbPlayers > 5);
 		
 		data = new SimpleGameData();
@@ -63,7 +63,7 @@ public class SimpleGameControllerConsole {
 		int choice = 0;
 		do {
 			System.out.println("1. Donner un indice | 2. Jouer une carte | 3. Défausser une carte");
-			choice = saisie.nextInt();
+			choice = inputNumber();
 			
 			if (choice == 1 && data.getBlueTokens() == 0) { // If no blue tokens are available, the player can't give an intel
 				System.out.println("Pas assez de jetons pour donner un indice");
@@ -112,7 +112,7 @@ public class SimpleGameControllerConsole {
 				System.out.println((i+1)+". "+pIntel.openHand());
 			}
 			
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie <1 || playerSaisie > l.size());
 		
 		playerSaisie--; // On décrémente car on a affiché i+1 pour la sélection
@@ -124,7 +124,7 @@ public class SimpleGameControllerConsole {
 		System.out.println("Indice de couleur ou de valeur ?");
 		do {
 			System.out.println("1. Indice de couleur | 2. Indice de valeur");
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie != 1 && playerSaisie != 2);
 		
 		int intelChoice = playerSaisie;
@@ -135,7 +135,7 @@ public class SimpleGameControllerConsole {
 			for (int i = 0; i < playerChoice.getHand().size(); i++) {
 				System.out.println((i+1)+". "+playerChoice.getCardInHand(i).openCard());
 			}
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie < 1 || playerSaisie > playerChoice.getHand().size());
 		
 		playerSaisie--;
@@ -159,7 +159,7 @@ public class SimpleGameControllerConsole {
 			for (int i = 0; i < player.getHand().size(); i++) {
 				System.out.println((i+1)+". "+player.getCardInHand(i));
 			}
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie < 1 || playerSaisie > player.getHand().size());
 		
 		playerSaisie--;
@@ -189,7 +189,7 @@ public class SimpleGameControllerConsole {
 			for (int i = 0; i < player.getHand().size(); i++) {
 				System.out.println((i+1)+". "+player.getCardInHand(i));
 			}
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie < 1 || playerSaisie > player.getHand().size());
 		
 		playerSaisie--;
@@ -218,6 +218,24 @@ public class SimpleGameControllerConsole {
 		} while (nom.isBlank() || !correct_name);
 		
 		return new Player(nom, data, handSize);
+	}
+	
+	/** let the user input his integer choice. If the input is not an integer, this function returns 0, which forces the input loop to cycle back.
+	 *  @return The number inputted if the input is correct, 0 if it's not*/
+	private int inputNumber() {
+		String input = saisie.nextLine();
+		int numericInput = 0;
+		if (input.isEmpty())
+			return 0;
+		
+		try {
+			numericInput = Integer.parseInt(input);
+		}
+		catch(Exception e) {
+			return 0;
+		}
+		
+		return numericInput;
 	}
 
 }

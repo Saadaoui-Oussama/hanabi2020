@@ -13,7 +13,21 @@ public class Main {
 		do {
 			System.out.println("Quel mode d'affichage souhaitez-vous ?");
 			System.out.println("1. Console || 2. Graphique");
-			gameChoice = saisie.nextInt();
+			
+			String input = saisie.nextLine();
+			int numericInput = 0;
+			if (input.isEmpty())
+				gameChoice = 0;
+			
+			try {
+				numericInput = Integer.parseInt(input);
+			}
+			catch(Exception e) {
+				gameChoice = 0;
+			}
+			
+			gameChoice = numericInput;
+			
 		} while (gameChoice < 1 || gameChoice > 2);
 		
 		if (gameChoice == 1) {
