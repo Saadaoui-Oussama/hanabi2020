@@ -45,29 +45,29 @@ public class SimpleGameController {
 			data.addPlayer(p);
 		}
 		
-		Application.run(Color.BLACK, context -> {
+		Application.run(Color.GRAY, context -> {
 	        SimpleGameView view = new SimpleGameView(context);
-	        view.showField();
+	        view.showField(data);
 	        view.showMenu();
-	        view.showDiscardZone();
+	        view.showDiscardZone(data);
 	        view.showPlayer(data);
-	        mainLoop(context, data)	     ;   
+	        mainLoop(view, data, context);   
 	    });
 	}
 		
-		private void mainLoop(ApplicationContext context, SimpleGameData data) {
+		private void mainLoop(SimpleGameView view, SimpleGameData data, ApplicationContext context) {
 			// Boucle du jeu
 			while (data.getRedTokens() != 3 && !data.isSetComplete()) {
 				System.out.println("Tour n°"+nbTours);
-				
-				
-
+				view.showTurn(nbTours);
+				view.showTokens(data);
 				for (Player p : data.getPlayers()) {
+					//view.clearWin(context);
+					view.showTurnName(p.getName());
 					turn(p);
 					if (data.lastTurn())
 						break;
 				}
-					
 				nbTours++;
 				if (data.lastTurn())
 					break;
@@ -154,8 +154,8 @@ public class SimpleGameController {
 			System.out.println(p.openHand());
 		
 		// Affichage du terrain et de la défausse (fonctions de test - à mieux redéfinir pour phase 3 ?) TODO
-		view.showField();
-		view.showDiscardZone();
+		view.showField(data);
+		view.showDiscardZone(data);
 	}
 
 	private void actionGiveIntel(Player player) {

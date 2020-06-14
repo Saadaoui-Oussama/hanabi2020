@@ -8,6 +8,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.util.List;
+import java.util.Map;
 
 import fr.umlv.zen5.ApplicationContext;
 import model.Card;
@@ -36,15 +37,15 @@ public class SimpleGameView {
 		});
 	}
 	
-	public void showField() {
+	public void showField(SimpleGameData data) {
 		context.renderFrame(graphics -> {
-			drawField(graphics);
+			drawField(graphics, data);
 		});
 	}
 	
-	public void showDiscardZone() {
+	public void showDiscardZone(SimpleGameData data) {
 		context.renderFrame(graphics -> {
-			drawDiscardZone(graphics);
+			drawDiscardZone(graphics, data);
 		});
 	}
 	
@@ -61,11 +62,6 @@ public class SimpleGameView {
 		});
 	}
 	
-	public void showCards(List<Card> hand) {
-		context.renderFrame(graphics -> {
-			drawCard(graphics, hand);
-		});
-	}
 	public void showTurn(int nb) {
 		String str = "Tour " + nb + " :";
 		context.renderFrame(graphics -> {
@@ -86,46 +82,57 @@ public class SimpleGameView {
 	
 	private void drawMenu(Graphics2D graphics) {
 
-    		graphics.setColor(Color.RED);
-    		graphics.draw(new Rectangle.Float(0, height/4, width/3, height/4));
-    		graphics.setColor(Color.BLUE);
-    		graphics.draw(new Rectangle.Float(width/3, height/4, width/3, height/4));
-    		graphics.setColor(Color.GREEN);
-    		graphics.draw(new Rectangle.Float((width/3)*2, height/4, width/3, height/4));
+    	graphics.setColor(Color.RED);
+    	graphics.draw(new Rectangle.Float(0, height/4, width/3, height/4));
+    	graphics.setColor(Color.BLUE);
+    	graphics.draw(new Rectangle.Float(width/3, height/4, width/3, height/4));
+    	graphics.setColor(Color.GREEN);
+    	graphics.draw(new Rectangle.Float((width/3)*2, height/4, width/3, height/4));
 
 	}
 	 
-	private void drawField(Graphics2D graphics) {
-    		graphics.setColor(Color.GRAY);
-    		graphics.draw(new Rectangle.Float(0, 0, width/2, height/4));
-
+	private void drawField(Graphics2D graphics, SimpleGameData data) {
+		graphics.setColor(Color.WHITE);
+		graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+		graphics.drawString("FIELD", 10, 30);
+    	graphics.setColor(Color.GRAY);
+    	graphics.draw(new Rectangle.Float(0, 0, width/2, height/4));
+    	drawFieldCard(graphics,data, 50, height/4/2);
 	}
 	
-	private void drawDiscardZone(Graphics2D graphics) {
-    		graphics.setColor(Color.ORANGE);
-    		graphics.draw(new Rectangle.Float(width/2, 0, width/2, height/4));
+	private void drawDiscardZone(Graphics2D graphics, SimpleGameData data) {
+		graphics.setColor(Color.ORANGE);
+		graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+		graphics.drawString("DISCARD ZONE", (width/+2)+20, 30);
+    	graphics.setColor(Color.ORANGE);
+    	graphics.draw(new Rectangle.Float(width/2, 0, width/2, height/4));
+    	drawDiscardCard(graphics,data, 50, height/4/2);
 	}
 	
 	private void drawPlayer(Graphics2D graphics, SimpleGameData data) {	
 		YPlayerOrigin = height-(height/4);
 		String str = "";
 		List<Player> list = data.getPlayers();
+		float X = height-(height/4)+50;
+		float Y = XPlayerOrigin;
 		
     		for(Player pl : list) {
+    			X = XPlayerOrigin;
+    			Y = height-(height/4)+50;
     			graphics.setColor(Color.cyan);
     			graphics.draw(new Rectangle.Float(XPlayerOrigin, YPlayerOrigin, (width/5), height));
     			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
     			str = pl.getName();
 				graphics.drawString(str, XPlayerOrigin, YPlayerOrigin-10);  // TODO mettre les bonnes coordonnées 
-				drawCard(graphics, pl.getHand());
+				drawCard(graphics, pl.getHand(),X,Y);
         		XPlayerOrigin = XPlayerOrigin + (width/5);
         		YPlayerOrigin = height-(height/4);
     		}
 	}
 	
-	private void drawCard(Graphics2D graphics, List<Card> hand) {
-			float YCard = height-(height/4)+50;
-			float XCard = XPlayerOrigin;
+	private void drawCard(Graphics2D graphics, List<Card> hand, float X, float Y) {
+			float XCard = X;
+			float YCard = Y;
 			for(Card cd : hand) {
 				
 				switch(cd.getColor()) {
@@ -171,6 +178,114 @@ public class SimpleGameView {
 					break;
 				}
 			}
+	}
+	
+	private void drawFieldCard(Graphics2D graphics, SimpleGameData data, float X, float Y) {
+		float XCard = X;
+		float YCard = Y;
+		for (FireworkColor c : data.getField().keySet()) {
+			switch(c) {
+			
+			case white:
+				graphics.setColor(Color.WHITE);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
+				XCard = XCard+100;
+				break;
+			
+			case blue:
+				graphics.setColor(Color.BLUE);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
+				XCard = XCard+100;
+				break;
+			
+			case yellow:
+				graphics.setColor(Color.YELLOW);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
+				XCard = XCard+100;
+				break;
+				
+			case red:
+				graphics.setColor(Color.RED);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
+				XCard = XCard+100;
+				break;
+				
+			case green:
+				graphics.setColor(Color.GREEN);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
+				XCard = XCard+100;
+				break;
+			}
+		}
+}
+	
+	private void drawDiscardCard(Graphics2D graphics, SimpleGameData data, float X, float Y) {
+	float XCard = X;
+	float YCard = Y;
+	for (FireworkColor c : data.getField().keySet()) {
+		switch(c) {
+		
+		case white:
+			for (int value : data.getDiscardZone().get(c)) {
+				graphics.setColor(Color.WHITE);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(value), XCard+60, YCard);
+				XCard = XCard+100;
+			}
+			break;
+		
+		case blue:
+			for (int value : data.getDiscardZone().get(c)) {
+				graphics.setColor(Color.BLUE);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(value), XCard+60, YCard);
+				XCard = XCard+100;
+			}
+			break;
+		
+		case yellow:
+			for (int value : data.getDiscardZone().get(c)) {
+				graphics.setColor(Color.YELLOW);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(value), XCard+60, YCard);
+				XCard = XCard+100;
+			}
+			break;
+			
+		case red:
+			for (int value : data.getDiscardZone().get(c)) {
+				graphics.setColor(Color.RED);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(value), XCard+60, YCard);
+				XCard = XCard+100;
+			}
+			break;
+			
+		case green:
+			for (int value : data.getDiscardZone().get(c)) {
+				graphics.setColor(Color.GREEN);
+				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(value), XCard+60, YCard);
+				XCard = XCard+100;
+			}
+			break;
+			}
+		}
 	}
 	
 	public void printBlueTokens(Graphics2D graphics, int tokens) {
