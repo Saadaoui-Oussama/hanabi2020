@@ -68,7 +68,7 @@ public class SimpleGameView_BACK {
 		YPlayerOrigin = height-(height/4);
 		
     	context.renderFrame(graphics -> {
-    		for(var i=0; i < data.getNbPlayers(); i++) {
+    		for(var i=0; i <  data.getPlayers().size(); i++) {
     			graphics.setColor(Color.cyan);
         		Rectangle2D Field = new Rectangle2D.Float(0, YPlayerOrigin, (width/5), height);
         		graphics.fill(Field);
@@ -118,27 +118,27 @@ public class SimpleGameView_BACK {
 		});
 	}
 	
-	private void printBlueTokens(ApplicationContext context, int tokens) {
-		context.renderFrame(graphics -> {	
-			for(var i=0; i < tokens; i++) {
-    			graphics.setColor(Color.BLUE);
-    			Ellipse2D Field = new Ellipse2D.Float();  //TODO
-        		graphics.fill(Field);
-        		XPlayerOrigin = XPlayerOrigin + (width/5);
-    		}
-		});
-	}
-	
-	private void printRedTokens(ApplicationContext context, int tokens) {
-		
-	}
-	
-	
-	
-	Application.run(Color.BLACK, context -> {
-        SimpleGameView_BACK view = new SimpleGameView_BACK(context);
-        view.showField();
-        view.showMenu();
-
-    });
+//	private void printBlueTokens(ApplicationContext context, int tokens) {
+//		context.renderFrame(graphics -> {	
+//			for(var i=0; i < tokens; i++) {
+//    			graphics.setColor(Color.BLUE);
+//    			Ellipse2D Field = new Ellipse2D.Float();  //TODO
+//        		graphics.fill(Field);
+//        		XPlayerOrigin = XPlayerOrigin + (width/5);
+//    		}
+//		});
+//	}
+//	
+//	private void printRedTokens(ApplicationContext context, int tokens) {
+//		
+//	}
+//	
+//	
+//	
+//	Application.run(Color.BLACK, context -> {
+//        SimpleGameView_BACK view = new SimpleGameView_BACK(context);
+//        view.showField();
+//        view.showMenu();
+//
+//    });
 }

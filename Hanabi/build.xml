@@ -1,0 +1,15 @@
+<project name="Hanabi" default="jar">
+	<path id="build.classpath">
+        <fileset dir="lib">
+            <include name="zen5.jar"/>
+        </fileset>
+    </path>
+    <property name="src.dir" value="src"/>
+    <property name="classes.dir" value="classes"/>
+    <property name="main-class" value="main.Main"/>
+
+	<target name="clean">
+        <delete dir="${classes.dir}"/>
+    </target>
+
+</project>

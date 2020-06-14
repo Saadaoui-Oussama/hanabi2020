@@ -26,7 +26,7 @@ public class SimpleGameControllerConsole {
 			nbPlayers = saisie.nextInt();
 		} while (nbPlayers < 2 || nbPlayers > 5);
 		
-		data = new SimpleGameData(nbPlayers);
+		data = new SimpleGameData();
 		view = new SimpleGameViewConsole(data);
 		
 		// 4 cartes si 4 à 5 joueurs, 5 cartes si 2 à 3 joueurs
@@ -44,8 +44,6 @@ public class SimpleGameControllerConsole {
 			
 			for (Player p : data.getPlayers()) {
 				turn(p);
-				if (data.lastTurn())
-					break;
 			}
 			
 			nbTours++;
@@ -54,12 +52,13 @@ public class SimpleGameControllerConsole {
 		}
 		
 		if (data.getRedTokens() == 3) 
-			System.out.println("Vous avez PERDU");
+			view.showDefeat();
 		else {
 			view.showScore();
 		}
 	}
 
+	/** Let the player in arguments plays his turn (give a intel to another player, play a card or discard a card)*/
 	private void turn(Player player) {
 		view.showInformations(player);
 		
@@ -68,7 +67,7 @@ public class SimpleGameControllerConsole {
 			System.out.println("1. Donner un indice | 2. Jouer une carte | 3. Défausser une carte");
 			choice = saisie.nextInt();
 			
-			if (choice == 1 && data.getBlueTokens() == 0) {
+			if (choice == 1 && data.getBlueTokens() == 0) { // If no blue tokens are available, the player can't give an intel
 				System.out.println("Pas assez de jetons pour donner un indice");
 				choice = 0;
 			}
@@ -94,12 +93,14 @@ public class SimpleGameControllerConsole {
 		cleanConsole();
 	}
 
-	/** Fonction très "cheap" pour nettoyer la console à chaque nouveau tour pendant la partie */
+	/** Very cheap function to clean the console for each player's turn */
 	private void cleanConsole() {
 		for (int i = 0; i < 50; i++)
 			System.out.println();
 	}
 
+	/** Let the player in argument give an intel to another player 
+	 * @param player - player who's doing the action*/
 	private void actionGiveIntel(Player player) {
 		int playerSaisie = 0;
 		// On veut travailler avec une liste ou il n'y a pas le joueur actuel (on ne peut pas se donner un indice)
@@ -151,6 +152,8 @@ public class SimpleGameControllerConsole {
 		data.removeBlueToken();
 	}
 	
+	/** Let the player choose a card and play it on the field. If the card is incorrect, the card is instead discarded and a red tokken is added
+	 * @param player - player who's doing the action */
 	private void actionPlayCard(Player player) {
 		int playerSaisie = 0;
 		do {
@@ -171,7 +174,7 @@ public class SimpleGameControllerConsole {
 				data.addBlueToken();
 		}
 		else { // Carte incorrecte, on défausse la carte et on ajoute un jeton rouge
-			data.addToDefausse(choice);
+			data.addToDiscardZone(choice);
 			data.addRedToken();
 		}
 		
@@ -179,6 +182,8 @@ public class SimpleGameControllerConsole {
 		
 	}
 	
+	/** Let the player choose a card and discard it. The players gain a blue tokken by doing this.
+	 * @param player - player who's doing the action */
 	private void actionDiscardCard(Player player) {
 		int playerSaisie = 0;
 		do {
@@ -191,10 +196,12 @@ public class SimpleGameControllerConsole {
 		
 		playerSaisie--;
 		Card discarded = player.discardCard(playerSaisie);
-		data.addToDefausse(discarded);
+		data.addToDiscardZone(discarded);
 		player.addCard(data.draw());
 	}
 
+	/** Create and return a new player by asking his name
+	 * @param handSize - size of the hand (depending on the total numbers of players) */
 	private Player createPlayer(int handSize) {
 		String nom;
 		boolean correct_name;

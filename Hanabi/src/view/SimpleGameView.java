@@ -84,7 +84,7 @@ public class SimpleGameView {
 	private void drawPlayer(Graphics2D graphics, SimpleGameData data) {	
 		YPlayerOrigin = height-(height/4);
 		
-    		for(var i=0; i < data.getNbPlayers(); i++) {
+    		for(var i=0; i < data.getPlayers().size(); i++) {
     			graphics.setColor(Color.cyan);
     			graphics.draw(new Rectangle.Float(0, YPlayerOrigin, (width/5), height));
         		XPlayerOrigin = XPlayerOrigin + (width/5);

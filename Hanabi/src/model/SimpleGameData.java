@@ -9,26 +9,21 @@ import java.util.stream.Collectors;
 
 public class SimpleGameData {
 	
-	//TODO listener sur redTokens, field et defausse ?
-	
 	private int redTokens; // Jetons obtenus en jouant une mauvaise carte, a 3 jetons, les joueurs ont perdu
 	private int blueTokens; // Peut être utilisé pour donner un indice - défausser une carte ou compléter une série en génère un
 	
 	private List<Player> players;
-	private int nbPlayers;
 	
 	private ArrayList<Card> deck;
 	private Map<FireworkColor, Integer> field;
 	private Map<FireworkColor, ArrayList<Integer>> discardZone;
 	
 	
-	/** Création de la classe gestion de données 
-	 * @param nbPlayers: nombre de joueurs **/
-	public SimpleGameData(int nbPlayers) {
+	/** Creates all the game's data: the deck, a list of players, the field, the discard zone, and the blue and red tokens **/
+	public SimpleGameData() {
 		this.redTokens = 0;
 		this.blueTokens = 8;
 		
-		this.nbPlayers = nbPlayers;
 		this.players = new ArrayList<Player>();
 		
 		this.deck = generateDeck();
@@ -36,6 +31,7 @@ public class SimpleGameData {
 		this.discardZone = generateDiscardZone();
 	}
 
+	/** Generate the deck of Hanabi, and then shuffle it*/
 	private ArrayList<Card> generateDeck() {
 		ArrayList<Card> deck = new ArrayList<Card>();
 		for (FireworkColor c : FireworkColor.values()) { // 5 couleurs
@@ -47,7 +43,7 @@ public class SimpleGameData {
 					deck.add(new Card(c, i));
 					deck.add(new Card(c, i));
 					break;
-				case 2, 3, 4: //TODO enable preview ou pas ?
+				case 2, 3, 4: //TODO enable preview à activer
 					deck.add(new Card(c, i));
 					deck.add(new Card(c, i));
 					break;
@@ -56,11 +52,13 @@ public class SimpleGameData {
 					break;
 				}
 			}
-			Collections.shuffle(deck);
 		}
+		System.out.println(deck);
+		Collections.shuffle(deck);
 		return deck;
 	}
 	
+	/** Generate a field, which consists of 5 stacks of card of each color, and containing the top value of the stack (starting at 0) */
 	private Map<FireworkColor, Integer> generateField() {
 		Map<FireworkColor, Integer> map = new HashMap<FireworkColor, Integer>();
 		
@@ -71,6 +69,7 @@ public class SimpleGameData {
 		return map;
 	}
 	
+	/** Generate a discard zone, which consists of 5 stacks of card of each color, and containing the value of all discarded cards of each stack*/
 	private Map<FireworkColor, ArrayList<Integer>> generateDiscardZone() {
 		Map<FireworkColor, ArrayList<Integer>> map = new HashMap<FireworkColor, ArrayList<Integer>>();
 		
@@ -81,67 +80,77 @@ public class SimpleGameData {
 		return map;
 	}
 	
+	/** Return a card drawed (removed from the top of the deck). If the deck is empty, we can't draw and return a null (no card) */
 	public Card draw() {
-		if (deck.size()<=0)
-			throw new IllegalStateException("Deck vide");
+		if (deck.size()<=0) {
+			System.out.println("Deck vide, pioche impossible !");
+			return null;
+		}
+		
 		return deck.remove(0);
 	}
 	
+	/** Check if the current game is on it's last turn by checking if the deck is empty. If it is, we are in the last turn.*/
 	public boolean lastTurn() {
 		if (deck.size() == 0)
 			return true;
 		return false;
 	}
 	
-	/* Getters/Setters */
-	
-	public int getNbPlayers() {
-		return this.nbPlayers;
-	}
-	
+	/** Returns the number of red tokens availables */
 	public int getRedTokens() {
 		return redTokens;
 	}
 
+	/** Returns the number of blue tokens availables*/
 	public int getBlueTokens() {
 		return blueTokens;
 	}
 
+	/** */
 	public ArrayList<Card> getDeck() {
 		return deck;
 	}
 
+	/** Returns the field */
 	public Map<FireworkColor, Integer> getField() {
 		return field;
 	}
 
-	public Map<FireworkColor, ArrayList<Integer>> getDefausse() {
+	/** Return the discard zone */
+	public Map<FireworkColor, ArrayList<Integer>> getDiscardZone() {
 		return discardZone;
 	}
 
+	/** Return a list with all players*/
 	public List<Player> getPlayers() {
 		return players;
 	}
 
+	/** Add a player to the data's list of players*/
 	public void addPlayer(Player player) {
 		this.players.add(player);
 	}
 	
+	/** Add a blue token for the players to use. Since 8 tokens is the maximum, if we already have 8 tokens, no tokens are added */
 	public void addBlueToken() {
 		if (blueTokens < 8)
 			this.blueTokens++;
 	}
 	
+	/** Remove a blue tokken to be used */
 	public void removeBlueToken() {
 		if (blueTokens > 0)
 			this.blueTokens--;
 	}
 	
+	/** Add a red token */
 	public void addRedToken() {
 		if (redTokens < 3)
 			this.redTokens++;
 	}
 
+	/** If all stack of cards is complete (the top card of all stacks is 5), returns true*/
 	public boolean isSetComplete() {
 		for (FireworkColor c : field.keySet()) {
 			if (field.get(c) != 5)
@@ -150,6 +159,7 @@ public class SimpleGameData {
 		return true;
 	}
 	
+	/** returns the score of the field*/
 	public int score() {
 		int score = 0;
 		for (FireworkColor c : field.keySet()) {
@@ -158,36 +168,20 @@ public class SimpleGameData {
 		return score;
 	}
 	
+	/** Plays a card on the field*/
 	public void addToField(Card c) {
 		field.put(c.getColor(), c.getValue());
 	}
 
-	public void addToDefausse(Card c) {
+	/** Discard a card by giving its value to the right color stack*/
+	public void addToDiscardZone(Card c) {
 		ArrayList<Integer> itemsList = discardZone.get(c.getColor());
         itemsList.add(c.getValue());
 		discardZone.put(c.getColor(), itemsList);
 	}
-	
-	public void showField() {
-		System.out.println("FIELD");
-		
-		for (FireworkColor c : field.keySet()) {
-			System.out.println("Couleur "+c+": "+field.get(c));
-		}
-	}
-	
-	public void showDiscardZone() {
-		System.out.println("DEFAUSSE");
-		
-		for (FireworkColor c : discardZone.keySet()) {
-			System.out.print("Couleur "+c+": ");
-			for (int value : discardZone.get(c)) {
-				System.out.print(value+" ");
-			}
-			System.out.println();
-		}
-	}
 
+	/** Returns the list of players without the player given as arguments
+	 * @param player - the player which should not appear in the list*/
 	public List<Player> getListWithoutPlayer(Player player) {
 		return getPlayers().stream().filter(p -> !p.getName().equals(player.getName())).collect(Collectors.toList());
 	}

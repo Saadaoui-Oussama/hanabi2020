@@ -1,5 +1,6 @@
 package view;
 
+import model.FireworkColor;
 import model.Player;
 import model.SimpleGameData;
 
@@ -24,9 +25,29 @@ public class SimpleGameViewConsole {
 		for (Player p : data.getListWithoutPlayer(player))
 			System.out.println(p.openHand());
 		
-		// Affichage du terrain et de la défausse (fonctions de test - à mieux redéfinir pour phase 3 ?) TODO
-		data.showField();
-		data.showDiscardZone();
+		// Affichage du terrain et de la défausse
+		showField();
+		showDiscardZone();
+	}
+	
+	public void showField() {
+		System.out.println("FIELD");
+		
+		for (FireworkColor c : data.getField().keySet()) {
+			System.out.println("Couleur "+c+": "+data.getField().get(c));
+		}
+	}
+	
+	public void showDiscardZone() {
+		System.out.println("DEFAUSSE");
+		
+		for (FireworkColor c : data.getDiscardZone().keySet()) {
+			System.out.print("Couleur "+c+": ");
+			for (int value : data.getDiscardZone().get(c)) {
+				System.out.print(value+" ");
+			}
+			System.out.println();
+		}
 	}
 	
 	public void showScore() {
@@ -44,8 +65,14 @@ public class SimpleGameViewConsole {
 		else if(scoreFinal >= 21 && scoreFinal <= 24)
 			System.out.println("Extraordinaire, restera gravée dans les mémoires !");
 		else
-			System.out.println("Légendaire, petits et grands sans voix,  des étoiles dans les yeux");
+			System.out.println("Légendaire, petits et grands sans voix, des étoiles dans les yeux");
 		
 		System.out.println("A bientôt !");
 	}
+
+	public void showDefeat() {
+		System.out.println("Vous avez PERDU");
+	}
+	
+	
 }

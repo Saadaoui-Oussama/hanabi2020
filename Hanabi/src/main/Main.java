@@ -16,9 +16,6 @@ public class Main {
 			gameChoice = saisie.nextInt();
 		} while (gameChoice < 1 || gameChoice > 2);
 		
-		
-		
-		
 		if (gameChoice == 1) {
 			SimpleGameControllerConsole game = new SimpleGameControllerConsole();
 			game.start();

@@ -7,6 +7,9 @@ public class Card {
 	private boolean ind_color; // Permet de savoir si l'indice sur la valeur/couleur a été donné
 	private boolean ind_value;
 	
+	/** Create a Card which can be used by the players to play Hanabi.
+	 * @param c - Color of the card
+	 * @param val - Value of the card*/
 	public Card(FireworkColor c, int val) {
 		color = c;
 		value = val;
@@ -14,28 +17,32 @@ public class Card {
 		ind_value = false;
 	}
 	
-	/** Getter */
+	/** Get a card's color */
 	public FireworkColor getColor() {
 		return color;
 	}
 
+	/** Get a card's value */
 	public int getValue() {
 		return value;
 	}
 	
+	/** Get to know if the color of this card was revealed */
 	public boolean getIndColor() {
 		return ind_color;
 	}
 	
+	/** Get to know if the value of this card was revealed */
 	public boolean getIndValue() {
 		return ind_value;
 	}
 	
-	/** Active l'indice */
+	/** Make the color of the card visible to all players */
 	public void giveIndColor() {
 		this.ind_color = true;
 	}
 	
+	/** Make the value of the card visible to all players */
 	public void giveIndValue() {
 		this.ind_value = true;
 	}
@@ -61,6 +68,7 @@ public class Card {
 		return hash;
 	}
 
+	/** Show the revealed card (its value and color are not hidden) */
 	public String openCard() {
 		String stringColor = color.toString();
 		String stringValue = value+"";
@@ -75,6 +83,7 @@ public class Card {
 	}
 	
 	@Override
+	/** Show the value and color of this card if it was revealed. If not, the value or color will be hidden */
 	public String toString() {
 		String stringColor = "?";
 		String stringValue = "?";

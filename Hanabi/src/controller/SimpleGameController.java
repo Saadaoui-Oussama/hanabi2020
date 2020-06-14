@@ -19,7 +19,7 @@ import view.SimpleGameView_BACK;
 public class SimpleGameController {
 	
 	private SimpleGameData data;
-	//private SimpleGameView view;
+	private SimpleGameView view;
 	private Scanner saisie;
 	
 	private int nbTours = 1; // Repère de tour
@@ -34,7 +34,7 @@ public class SimpleGameController {
 			nbPlayers = saisie.nextInt();
 		} while (nbPlayers < 2 || nbPlayers > 5);
 		
-		data = new SimpleGameData(nbPlayers);
+		data = new SimpleGameData();
 		
 		// 4 cartes si 4 à 5 joueurs, 5 cartes si 2 à 3 joueurs
 		int handSize = (nbPlayers > 3)? 4: 5;
@@ -154,8 +154,8 @@ public class SimpleGameController {
 			System.out.println(p.openHand());
 		
 		// Affichage du terrain et de la défausse (fonctions de test - à mieux redéfinir pour phase 3 ?) TODO
-		data.showField();
-		data.showDiscardZone();
+		view.showField();
+		view.showDiscardZone();
 	}
 
 	private void actionGiveIntel(Player player) {
@@ -229,7 +229,7 @@ public class SimpleGameController {
 				data.addBlueToken();
 		}
 		else { // Carte incorrecte, on défausse la carte et on ajoute un jeton rouge
-			data.addToDefausse(choice);
+			data.addToDiscardZone(choice);
 			data.addRedToken();
 		}
 		
@@ -249,7 +249,7 @@ public class SimpleGameController {
 		
 		playerSaisie--;
 		Card discarded = player.discardCard(playerSaisie);
-		data.addToDefausse(discarded);
+		data.addToDiscardZone(discarded);
 		player.addCard(data.draw());
 	}
 
