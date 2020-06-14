@@ -37,14 +37,8 @@ public class SimpleGameController {
 			data.addPlayer(p);
 		}
 		
-		Application.run(Color.GRAY, context -> {
-            SimpleGameView view = new SimpleGameView(context);
-            view.showField(data);
-            view.showMenu();
-            view.showDiscardZone(data);
-            view.showPlayer(data);
-            gameloop(view);   
-        });
+        view = new SimpleGameView(data);
+        gameloop();
 		
 		if (data.getRedTokens() == 3) 
 			view.printLose();
@@ -54,10 +48,9 @@ public class SimpleGameController {
 	}
 	
 	/** The game loop. Breaks when the player completes all sets, loses, or if the deck is empty after the last turn */
-	public void gameloop(SimpleGameView view) {
+	public void gameloop() {
 		// Boucle du jeu
 		while (data.getRedTokens() != 3 && !data.isSetComplete()) {
-			System.out.println(data.getNbTurns());
 			view.showTurn(data.getNbTurns());
             view.showTokens(data);
             

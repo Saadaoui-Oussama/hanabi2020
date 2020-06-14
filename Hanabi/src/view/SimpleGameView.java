@@ -9,7 +9,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import fr.umlv.zen5.Application;
 import fr.umlv.zen5.ApplicationContext;
 import model.Card;
 import model.FireworkColor;
@@ -18,16 +20,27 @@ import model.SimpleGameData;
 
 public class SimpleGameView {
 	
-	ApplicationContext context;
+	private SimpleGameData data;
+	
+	private ApplicationContext context;
 	private float XPlayerOrigin = 0;
 	private float YPlayerOrigin  = 0;
-	float width ; 
-	float height; 
+	private float width; 
+	private float height; 
 	
-	public SimpleGameView(ApplicationContext context) {
-		this.context = context;
-		this.width = context.getScreenInfo().getWidth();
-		this.height = context.getScreenInfo().getHeight();
+	public SimpleGameView(SimpleGameData data) {
+		this.data = data;
+		
+		Application.run(Color.GRAY, context -> {
+			this.context = context;
+			this.width = context.getScreenInfo().getWidth();
+			this.height = context.getScreenInfo().getHeight();
+		});
+		
+		showField(data);
+        showMenu();
+        showDiscardZone(data);
+        showPlayer(data);
 	}
 	
 	public void showMenu() {
