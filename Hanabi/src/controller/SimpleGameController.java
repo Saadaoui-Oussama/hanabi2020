@@ -1,8 +1,10 @@
 package controller;
 
+import java.awt.Color;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.umlv.zen5.Application;
 import model.*;
 import model.Player;
 import model.SimpleGameData;
@@ -25,7 +27,6 @@ public class SimpleGameController {
 		} while (nbPlayers < 2 || nbPlayers > 5);
 		
 		data = new SimpleGameData();
-		view = new SimpleGameView(null);
 		
 		// 4 cartes si 4 à 5 joueurs, 5 cartes si 2 à 3 joueurs
 		int handSize = (nbPlayers > 3)? 4: 5;
@@ -36,7 +37,14 @@ public class SimpleGameController {
 			data.addPlayer(p);
 		}
 		
-		gameloop();
+		Application.run(Color.GRAY, context -> {
+            SimpleGameView view = new SimpleGameView(context);
+            view.showField(data);
+            view.showMenu();
+            view.showDiscardZone(data);
+            view.showPlayer(data);
+            gameloop(view);   
+        });
 		
 		if (data.getRedTokens() == 3) 
 			view.printLose();
@@ -46,19 +54,21 @@ public class SimpleGameController {
 	}
 	
 	/** The game loop. Breaks when the player completes all sets, loses, or if the deck is empty after the last turn */
-	public void gameloop() {
+	public void gameloop(SimpleGameView view) {
 		// Boucle du jeu
-			while (data.getRedTokens() != 3 && !data.isSetComplete()) {
-				System.out.println("Tour n°"+data.getNbTurns());
-				
-				for (Player p : data.getPlayers()) {
-					turn(p);
-				}
-				
-				data.addCountTurns();
-				if (data.lastTurn())
-					break;
+		while (data.getRedTokens() != 3 && !data.isSetComplete()) {
+			System.out.println(data.getNbTurns());
+			view.showTurn(data.getNbTurns());
+            view.showTokens(data);
+            
+			for (Player p : data.getPlayers()) {
+				view.showTurnName(p.getName());
+				turn(p);
 			}
+			
+			if (data.lastTurn())
+				break;
+		}
 	}
 
 	/** Let the player in arguments plays his turn (give a intel to another player, play a card or discard a card)*/
@@ -92,6 +102,7 @@ public class SimpleGameController {
 			throw new IllegalStateException("choix action: "+choice); // On n'est jamais censé arrivé la
 		}
 		
+		data.addCountTurns();
 		cleanConsole();
 	}
 

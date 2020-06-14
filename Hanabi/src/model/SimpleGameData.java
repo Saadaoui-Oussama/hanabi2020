@@ -18,11 +18,12 @@ public class SimpleGameData {
 	private Map<FireworkColor, Integer> field;
 	private Map<FireworkColor, ArrayList<Integer>> discardZone;
 	
-	private int turn = 1; // Repère de tour
+	private int turn; // Repère de tour
 	
 	
 	/** Creates all the game's data: the deck, a list of players, the field, the discard zone, and the blue and red tokens **/
 	public SimpleGameData() {
+		this.turn = 1;
 		this.redTokens = 0;
 		this.blueTokens = 8;
 		

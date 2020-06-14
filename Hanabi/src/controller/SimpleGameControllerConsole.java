@@ -49,7 +49,6 @@ public class SimpleGameControllerConsole {
 	public void gameloop() {
 		// Boucle du jeu
 			while (data.getRedTokens() != 3 && !data.isSetComplete()) {
-				System.out.println("Tour n°"+data.getNbTurns());
 				
 				for (Player p : data.getPlayers()) {
 					turn(p);
@@ -59,6 +58,8 @@ public class SimpleGameControllerConsole {
 				if (data.lastTurn())
 					break;
 			}
+			
+			
 	}
 
 	/** Let the player in arguments plays his turn (give a intel to another player, play a card or discard a card)*/
@@ -93,6 +94,7 @@ public class SimpleGameControllerConsole {
 			throw new IllegalStateException("choix action: "+choice); // On n'est jamais censé arrivé la
 		}
 		
+		data.addCountTurns();
 		cleanConsole();
 	}
 

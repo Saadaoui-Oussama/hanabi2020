@@ -13,6 +13,7 @@ public class SimpleGameViewConsole {
 	}
 	
 	public void showInformations(Player player) {
+		System.out.println("Tour n°"+data.getNbTurns());
 		if (data.lastTurn())
 			System.out.println("LAST TURN !");
 		System.out.println("A ton tour, "+player.getName());
