@@ -33,7 +33,6 @@ public class SimpleGameView {
 	public void showMenu() {
 		context.renderFrame(graphics -> {
 			drawMenu(graphics);
-			
 		});
 	}
 	
@@ -83,10 +82,16 @@ public class SimpleGameView {
 	private void drawMenu(Graphics2D graphics) {
 
     	graphics.setColor(Color.RED);
+    	graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+		graphics.drawString("JOUER UNE CARTE", 70, height/4+(height/4/2));
     	graphics.draw(new Rectangle.Float(0, height/4, width/3, height/4));
     	graphics.setColor(Color.BLUE);
+    	graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+		graphics.drawString("DONNER UN INDICE", width/3+70, height/4+(height/4/2));
     	graphics.draw(new Rectangle.Float(width/3, height/4, width/3, height/4));
     	graphics.setColor(Color.GREEN);
+    	graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+		graphics.drawString("DEFAUSSER UNE CARTE", (width/3)*2+70, height/4+(height/4/2));
     	graphics.draw(new Rectangle.Float((width/3)*2, height/4, width/3, height/4));
 
 	}
@@ -232,6 +237,7 @@ public class SimpleGameView {
 	private void drawDiscardCard(Graphics2D graphics, SimpleGameData data, float X, float Y) {
 	float XCard = X;
 	float YCard = Y;
+
 	for (FireworkColor c : data.getField().keySet()) {
 		switch(c) {
 		
@@ -241,8 +247,9 @@ public class SimpleGameView {
 				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 				graphics.drawString(String.valueOf(value), XCard+60, YCard);
-				XCard = XCard+100;
+				YCard = YCard+50;
 			}
+			XCard = XCard+100;
 			break;
 		
 		case blue:
@@ -251,8 +258,9 @@ public class SimpleGameView {
 				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 				graphics.drawString(String.valueOf(value), XCard+60, YCard);
-				XCard = XCard+100;
+				YCard = YCard+50;
 			}
+			XCard = XCard+100;
 			break;
 		
 		case yellow:
@@ -261,8 +269,9 @@ public class SimpleGameView {
 				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 				graphics.drawString(String.valueOf(value), XCard+60, YCard);
-				XCard = XCard+100;
+				YCard = YCard+50;
 			}
+			XCard = XCard+100;
 			break;
 			
 		case red:
@@ -271,8 +280,9 @@ public class SimpleGameView {
 				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 				graphics.drawString(String.valueOf(value), XCard+60, YCard);
-				XCard = XCard+100;
+				YCard = YCard+50;
 			}
+			XCard = XCard+100;
 			break;
 			
 		case green:
@@ -281,8 +291,9 @@ public class SimpleGameView {
 				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 				graphics.drawString(String.valueOf(value), XCard+60, YCard);
-				XCard = XCard+100;
+				YCard = YCard+50;
 			}
+			XCard = XCard+100;
 			break;
 			}
 		}
@@ -310,18 +321,23 @@ public class SimpleGameView {
     	}
 	}
 	
-	public void printWin(Graphics2D graphics) {
+	public void printWin() {
 		clearWin(context);
-		graphics.setColor(Color.YELLOW);
-		graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-		graphics.drawString("YOU WIN ! \n WELL PLAY !", width/2, height/2-400);  // TODO mettre les bonnes coordonnées 
+		context.renderFrame(graphics -> {
+			graphics.setColor(Color.YELLOW);
+			graphics.setFont(graphics.getFont().deriveFont((float) 50.0));
+			graphics.drawString("YOU WIN ! \n WELL PLAY !", width/2, height/2-400);  // TODO mettre les bonnes coordonnées 
+		});
+		
 	}
 	
-	public void printLose(Graphics2D graphics) {
+	public void printLose() {
 		clearWin(context);
-		graphics.setColor(Color.RED);
-		graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-		graphics.drawString("YOU LOSE ... \n TRY AGAIN !", width/2, height/2-400);  // TODO mettre les bonnes coordonnées 
+		context.renderFrame(graphics -> {
+			graphics.setColor(Color.RED);
+			graphics.setFont(graphics.getFont().deriveFont((float) 50.0));
+			graphics.drawString("YOU LOSE ... \n TRY AGAIN !", width/2, height/2-400);  // TODO mettre les bonnes coordonnées 
+		});
 	}
 	
 	public void clearWin(ApplicationContext context) {

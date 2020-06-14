@@ -63,6 +63,7 @@ public class SimpleGameController {
 				view.showTokens(data);
 				for (Player p : data.getPlayers()) {
 					//view.clearWin(context);
+					
 					view.showTurnName(p.getName());
 					turn(p);
 					if (data.lastTurn())
