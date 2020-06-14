@@ -83,46 +83,66 @@ public class SimpleGameView {
 	
 	private void drawPlayer(Graphics2D graphics, SimpleGameData data) {	
 		YPlayerOrigin = height-(height/4);
+		String str = "";
+		List<Player> list = data.getPlayers();
 		
-    		for(var i=0; i < data.getPlayers().size(); i++) {
+    		for(Player pl : list) {
     			graphics.setColor(Color.cyan);
-    			graphics.draw(new Rectangle.Float(0, YPlayerOrigin, (width/5), height));
+    			graphics.draw(new Rectangle.Float(XPlayerOrigin, YPlayerOrigin, (width/5), height));
+    			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+    			str = pl.getName();
+				graphics.drawString(str, XPlayerOrigin, YPlayerOrigin-10);  // TODO mettre les bonnes coordonnées 
+				drawCard(graphics, pl.getHand());
         		XPlayerOrigin = XPlayerOrigin + (width/5);
+        		YPlayerOrigin = height-(height/4);
     		}
 	}
 	
 	private void drawCard(Graphics2D graphics, List<Card> hand) {
+			float YCard = height-(height/4)+50;
+			float XCard = XPlayerOrigin;
 			for(Card cd : hand) {
+				
 				switch(cd.getColor()) {
 				
 				case white:
 					graphics.setColor(Color.WHITE);
+					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), 0, 0);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					XCard = XCard+60;
 					break;
 				
 				case blue:
 					graphics.setColor(Color.BLUE);
+					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), 0, 0);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					XCard = XCard+60;
 					break;
 				
 				case yellow:
 					graphics.setColor(Color.YELLOW);
+					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), 0, 0);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					XCard = XCard+60;
 					break;
 					
 				case red:
 					graphics.setColor(Color.RED);
+					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), 0, 0);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					XCard = XCard+60;
 					break;
 					
 				case green:
 					graphics.setColor(Color.GREEN);
+					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), 0, 0);  // TODO mettre les bonnes coordonnées 
+					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);  // TODO mettre les bonnes coordonnées 
+					XCard = XCard+60;
 					break;
 				}
 			}
