@@ -1,14 +1,20 @@
 package controller;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.List;
 import java.util.Scanner;
 
 import fr.umlv.zen5.Application;
+import fr.umlv.zen5.ApplicationContext;
+import fr.umlv.zen5.Event;
+import fr.umlv.zen5.Event.Action;
+import fr.umlv.zen5.KeyboardKey;
 import model.Card;
 import model.Player;
 import model.SimpleGameData;
 import view.SimpleGameView;
+import view.SimpleGameView_BACK;
 
 public class SimpleGameController {
 	
@@ -39,23 +45,35 @@ public class SimpleGameController {
 			data.addPlayer(p);
 		}
 		
-		// Boucle du jeu
-		while (data.getRedTokens() != 3 && !data.isSetComplete()) {
-			System.out.println("Tour n°"+nbTours);
-			
-			for (Player p : data.getPlayers()) {
-				turn(p);
+		Application.run(Color.BLACK, context -> {
+	        SimpleGameView view = new SimpleGameView(context);
+	        view.showField();
+	        view.showMenu();
+	        view.showDiscardZone();
+	        view.showPlayer(data);
+	        mainLoop(context, data)	     ;   
+	    });
+	}
+		
+		private void mainLoop(ApplicationContext context, SimpleGameData data) {
+			// Boucle du jeu
+			while (data.getRedTokens() != 3 && !data.isSetComplete()) {
+				System.out.println("Tour n°"+nbTours);
+				
+				
+
+				for (Player p : data.getPlayers()) {
+					turn(p);
+					if (data.lastTurn())
+						break;
+				}
+					
+				nbTours++;
 				if (data.lastTurn())
 					break;
+				}
+				endGame();
 			}
-			
-			nbTours++;
-			if (data.lastTurn())
-				break;
-		}
-		
-		endGame();
-	}
 
 	private void endGame() {
 		if (data.getRedTokens() == 3) 
@@ -82,7 +100,8 @@ public class SimpleGameController {
 	}
 
 	private void turn(Player player) {
-		showInformations(player);
+		
+		
 		
 		int choice = 0;
 		do {

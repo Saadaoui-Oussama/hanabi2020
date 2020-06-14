@@ -155,4 +155,5 @@ public class SimpleGameView {
 			graphics.drawString("YOU LOSE ... \n TRY AGAIN !", width/3+(width/3/2), height/2);  // TODO mettre les bonnes coordonnées 
 	}
 	
+	
 }

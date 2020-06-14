@@ -1,6 +1,7 @@
 package main;
 import java.util.Scanner;
 
+import controller.SimpleGameController;
 import controller.SimpleGameControllerConsole;
 
 public class Main {
@@ -23,7 +24,8 @@ public class Main {
 			game.start();
 		}
 		else {
-			System.out.println("Version graphique en dev");
+			SimpleGameController game = new SimpleGameController();
+			game.start();
 		}
 		
 		saisie.close();
