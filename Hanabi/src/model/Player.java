@@ -39,7 +39,8 @@ public class Player {
 	}
 	
 	/** Remove and return the selected card to be discarded
-	 * @param index - index of the selected card in the player's hand*/
+	 * @param index - index of the selected card in the player's hand
+	 * @return Card discarded card*/
 	public Card discardCard(int index) {
 		Card discarded = this.hand.remove(index);
 		return discarded;
@@ -53,23 +54,27 @@ public class Player {
 	}
 	
 	/** Return a selected card in the hand
-	 * @param index - index of the selected card in the player's hand*/
+	 * @param index - index of the selected card in the player's hand
+	 * @return Card the selected card*/
 	public Card getCardInHand(int index) {
 		return this.getHand().get(index);
 	}
 	
-	/** Returns the player's name*/
+	/** Returns the player's name
+	 * @return String player name*/
 	public String getName() {
 		return name;
 	}
 
-	/** Returns a list of cards which corresponds to the player's hand*/
+	/** Returns a list of cards which corresponds to the player's hand
+	 * @return List player's hand*/
 	public List<Card> getHand() {
 		return hand;
 	}
 	
 	@Override
-	/** Shows the player's hand*/
+	/** Shows the player's hand
+	 * @return String toString of the player's hand*/
 	public String toString() {
 		String val = "Main de "+name+": | ";
 		for (Card c : hand)
@@ -77,7 +82,8 @@ public class Player {
 		return val;
 	}
 
-	/** Shows the player's revealed hand*/
+	/** Shows the player's revealed hand
+	 * @return String toString of the player's revealed hand*/
 	public String openHand() {
 		String val = "Main visible de "+name+": | ";
 		for (Card c : hand)

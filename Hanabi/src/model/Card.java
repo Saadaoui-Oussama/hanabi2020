@@ -17,22 +17,26 @@ public class Card {
 		ind_value = false;
 	}
 	
-	/** Get a card's color */
+	/** Get a card's color 
+	 * @return FireworkColor card's color*/
 	public FireworkColor getColor() {
 		return color;
 	}
 
-	/** Get a card's value */
+	/** Get a card's value 
+	 * @return int card's value*/
 	public int getValue() {
 		return value;
 	}
 	
-	/** Get to know if the color of this card was revealed */
+	/** Get to know if the color of this card was revealed 
+	 * @return boolean true if revealed*/
 	public boolean getIndColor() {
 		return ind_color;
 	}
 	
-	/** Get to know if the value of this card was revealed */
+	/** Get to know if the value of this card was revealed 
+	 * @return boolean true if revealed*/
 	public boolean getIndValue() {
 		return ind_value;
 	}
@@ -68,7 +72,8 @@ public class Card {
 		return hash;
 	}
 
-	/** Show the revealed card (its value and color are not hidden) */
+	/** Show the revealed card (its value and color are not hidden) 
+	 * @return String toString of the revealed card*/
 	public String openCard() {
 		String stringColor = color.toString();
 		String stringValue = value+"";
@@ -83,7 +88,8 @@ public class Card {
 	}
 	
 	@Override
-	/** Show the value and color of this card if it was revealed. If not, the value or color will be hidden */
+	/** Show the value and color of this card if it was revealed. If not, the value or color will be hidden
+	 * @return String toString of the card */
 	public String toString() {
 		String stringColor = "?";
 		String stringValue = "?";

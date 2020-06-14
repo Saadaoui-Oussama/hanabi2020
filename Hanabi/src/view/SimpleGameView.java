@@ -1,15 +1,10 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RectangularShape;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.ApplicationContext;
@@ -84,7 +79,7 @@ public class SimpleGameView {
 	}
 	
 	public void showTurnName(String name) {
-		String str = "A " + name + " de jouer !";
+		String str = "Au tour de " + name;
 		context.renderFrame(graphics -> {
 			graphics.setColor(Color.WHITE);
 			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
@@ -98,10 +93,12 @@ public class SimpleGameView {
     	graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 		graphics.drawString("JOUER UNE CARTE", 70, height/4+(height/4/2));
     	graphics.draw(new Rectangle.Float(0, height/4, width/3, height/4));
+    	
     	graphics.setColor(Color.BLUE);
     	graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 		graphics.drawString("DONNER UN INDICE", width/3+70, height/4+(height/4/2));
     	graphics.draw(new Rectangle.Float(width/3, height/4, width/3, height/4));
+    	
     	graphics.setColor(Color.GREEN);
     	graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 		graphics.drawString("DEFAUSSER UNE CARTE", (width/3)*2+70, height/4+(height/4/2));
@@ -151,51 +148,36 @@ public class SimpleGameView {
 	private void drawCard(Graphics2D graphics, List<Card> hand, float X, float Y) {
 			float XCard = X+5;
 			float YCard = Y;
-			float widthCard = width/5/5;
+			float widthCard = (width/5)/5;
 			for(Card cd : hand) {
 				
 				switch(cd.getColor()) {
 				
 				case white:
 					graphics.setColor(Color.WHITE);
-					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
-					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+widthCard;
 					break;
 				
 				case blue:
 					graphics.setColor(Color.BLUE);
-					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
-					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+widthCard;
 					break;
 				
 				case yellow:
 					graphics.setColor(Color.YELLOW);
-					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
-					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+widthCard;
 					break;
 					
 				case red:
 					graphics.setColor(Color.RED);
-					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
-					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+widthCard;
 					break;
 					
 				case green:
 					graphics.setColor(Color.GREEN);
-					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
-					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+widthCard;
 					break;
 				}
+				
+				graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
+				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+				graphics.drawString(String.valueOf(cd.getValue()), XCard+25, YCard);
+				XCard = XCard+widthCard;
 			}
 	}
 	
@@ -207,44 +189,30 @@ public class SimpleGameView {
 			
 			case white:
 				graphics.setColor(Color.WHITE);
-				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
-				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
-				XCard = XCard+100;
 				break;
 			
 			case blue:
 				graphics.setColor(Color.BLUE);
-				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
-				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
-				XCard = XCard+100;
 				break;
 			
 			case yellow:
 				graphics.setColor(Color.YELLOW);
-				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
-				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
-				XCard = XCard+100;
 				break;
 				
 			case red:
 				graphics.setColor(Color.RED);
-				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
-				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
-				XCard = XCard+100;
 				break;
 				
 			case green:
 				graphics.setColor(Color.GREEN);
-				graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
-				graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
-				graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
-				XCard = XCard+100;
+				
 				break;
 			}
+			
+			graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+			graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
+			graphics.drawString(String.valueOf(data.getField().get(c)), XCard+60, YCard);
+			XCard = XCard+100;
 		}
 }
 	
@@ -359,6 +327,19 @@ public class SimpleGameView {
 			graphics.clearRect(0,0, (int) width+1, (int) height+1);
 		});
 	}
+
+	public ApplicationContext getContext() {
+		return context;
+	}
+
+	public float getWidth() {
+		return width;
+	}
+
+	public float getHeight() {
+		return height;
+	}
+	
 	
 	
 }

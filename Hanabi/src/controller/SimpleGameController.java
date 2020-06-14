@@ -1,13 +1,12 @@
 package controller;
 
-import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Scanner;
 
-import fr.umlv.zen5.Application;
+import fr.umlv.zen5.Event;
+import fr.umlv.zen5.Event.Action;
 import model.*;
-import model.Player;
-import model.SimpleGameData;
 import view.SimpleGameView;
 
 public class SimpleGameController {
@@ -66,11 +65,9 @@ public class SimpleGameController {
 
 	/** Let the player in arguments plays his turn (give a intel to another player, play a card or discard a card)*/
 	private void turn(Player player) {
-		
 		int choice = 0;
 		do {
-			System.out.println("1. Donner un indice | 2. Jouer une carte | 3. Défausser une carte");
-			choice = inputNumber();
+			choice = getActionClick();
 			
 			if (choice == 1 && data.getBlueTokens() == 0) { // If no blue tokens are available, the player can't give an intel
 				System.out.println("Pas assez de jetons pour donner un indice");
@@ -78,6 +75,7 @@ public class SimpleGameController {
 			}
 		} while (choice <1 || choice > 3);
 		
+		//TODO Mettre à jour les méthodes d'action
 		switch (choice) {
 		case 1:
 			actionGiveIntel(player);
@@ -96,13 +94,6 @@ public class SimpleGameController {
 		}
 		
 		data.addCountTurns();
-		cleanConsole();
-	}
-
-	/** Very cheap function to clean the console for each player's turn */
-	private void cleanConsole() {
-		for (int i = 0; i < 50; i++)
-			System.out.println();
 	}
 
 	/** Let the player in argument give an intel to another player 
@@ -207,7 +198,8 @@ public class SimpleGameController {
 	}
 
 	/** Create and return a new player by asking his name
-	 * @param handSize - size of the hand (depending on the total numbers of players) */
+	 * @param handSize - size of the hand (depending on the total numbers of players) 
+	 * @return Player created player*/
 	private Player createPlayer(int handSize) {
 		String nom;
 		boolean correct_name;
@@ -245,5 +237,27 @@ public class SimpleGameController {
 		
 		return numericInput;
 	}
+	
+	/** 
+	 * Get where the user clicked in the action menu, if he doesn't click on any option of the menu, returns 0
+	 * @return Choice (between 1 and 3)*/
+	private int getActionClick() {
+		while (true) {
+	        Event event = view.getContext().pollEvent();
+	        if (event == null) continue;
+	        
+	        if (event.getAction() == Action.POINTER_DOWN) {
+		        Point2D.Float location = event.getLocation();
+		        float frameWidth = ((view.getWidth() / 2) / 3);
+
+		        if (location.y > view.getHeight() / 4 && location.y < view.getHeight() / 2) {
+		            for (int i = 0; i <= 3; i++) {
+		                if (location.x > frameWidth * i && location.x < frameWidth * i + frameWidth)
+		                    return i;
+		            }
+		        }
+	        }
+		}
+    }
 
 }

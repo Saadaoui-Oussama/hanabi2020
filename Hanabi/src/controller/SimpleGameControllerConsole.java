@@ -14,6 +14,7 @@ public class SimpleGameControllerConsole {
 	private SimpleGameViewConsole view;
 	private Scanner saisie;
 	
+	/** Initialize the start of the game*/
 	public void start() {
 		System.out.println("Bienvenue sur Hanabi !");
 		saisie = new Scanner(System.in);
@@ -41,7 +42,7 @@ public class SimpleGameControllerConsole {
 		if (data.getRedTokens() == 3) 
 			view.showDefeat();
 		else {
-			view.showScore();
+			view.showScore(data.score());
 		}
 	}
 	
@@ -78,22 +79,16 @@ public class SimpleGameControllerConsole {
 		} while (choice <1 || choice > 3);
 		
 		switch (choice) {
-		case 1:
-			actionGiveIntel(player);
-		break;
-			
-		case 2:
-			actionPlayCard(player);
-		break;
-		
-		case 3:
-			actionDiscardCard(player);
-		break;
-		
-		default:
-			throw new IllegalStateException("choix action: "+choice); // On n'est jamais censé arrivé la
+			case 1:
+				actionGiveIntel(player);
+			break;
+			case 2:
+				actionPlayCard(player);
+			break;
+			case 3:
+				actionDiscardCard(player);
+			break;
 		}
-		
 		data.addCountTurns();
 		cleanConsole();
 	}
@@ -206,7 +201,8 @@ public class SimpleGameControllerConsole {
 	}
 
 	/** Create and return a new player by asking his name
-	 * @param handSize - size of the hand (depending on the total numbers of players) */
+	 * @param handSize - size of the hand (depending on the total numbers of players)
+	 * @return Player - The new player */
 	private Player createPlayer(int handSize) {
 		String nom;
 		boolean correct_name;

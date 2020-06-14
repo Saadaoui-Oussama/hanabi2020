@@ -9,17 +9,14 @@ import java.util.stream.Collectors;
 
 public class SimpleGameData {
 	
-	private int redTokens; // Jetons obtenus en jouant une mauvaise carte, a 3 jetons, les joueurs ont perdu
-	private int blueTokens; // Peut être utilisé pour donner un indice - défausser une carte ou compléter une série en génère un
+	private int turn;
+	private int redTokens; // Tokens earned by playing a wrong card - at 3 tokens, it's game over
+	private int blueTokens; // Token used to give an intel
 	
 	private List<Player> players;
-	
 	private ArrayList<Card> deck;
-	private Map<FireworkColor, Integer> field;
-	private Map<FireworkColor, ArrayList<Integer>> discardZone;
-	
-	private int turn; // Repère de tour
-	
+	private Map<FireworkColor, Integer> field; // Only the top value of a card interests us for a field, hence the map with a Integer value
+	private Map<FireworkColor, ArrayList<Integer>> discardZone; // All the values of the discarded cards are important
 	
 	/** Creates all the game's data: the deck, a list of players, the field, the discard zone, and the blue and red tokens **/
 	public SimpleGameData() {
@@ -34,7 +31,8 @@ public class SimpleGameData {
 		this.discardZone = generateDiscardZone();
 	}
 
-	/** Generate the deck of Hanabi, and then shuffle it*/
+	/** Generate the deck of Hanabi, and then shuffle it
+	 * @return ArrayList List of cards named as deck*/
 	private ArrayList<Card> generateDeck() {
 		ArrayList<Card> deck = new ArrayList<Card>();
 		for (FireworkColor c : FireworkColor.values()) { // 5 couleurs
@@ -57,13 +55,18 @@ public class SimpleGameData {
 		return deck;
 	}
 	
-	/** used to generate the deck. Add n times a card with the color and value as argument in the deck */
+	/** Used to generate the deck. Add n times a card with the color and value as argument in the deck 
+	 * @param deck deck in which the cards shall be aded
+	 * @param color color of the card
+	 * @param value value of the card
+	 * @param n number of times the card should be added*/
 	public void addCardToDeck(ArrayList<Card> deck, FireworkColor color, int value, int n) {
 		for (int i = 0; i < n; i++)
 			deck.add(new Card(color, value));
 	}
 	
-	/** Generate a field, which consists of 5 stacks of card of each color, and containing the top value of the stack (starting at 0) */
+	/** Generate a field, which consists of 5 stacks of card of each color, and containing the top value of the stack (starting at 0) 
+	 * @return Map generated field*/
 	private Map<FireworkColor, Integer> generateField() {
 		Map<FireworkColor, Integer> map = new HashMap<FireworkColor, Integer>();
 		
@@ -74,7 +77,10 @@ public class SimpleGameData {
 		return map;
 	}
 	
-	/** Generate a discard zone, which consists of 5 stacks of card of each color, and containing the value of all discarded cards of each stack*/
+	/** 
+	 * Generate a discard zone, which consists of 5 stacks of card of each color, and containing the value of all discarded cards of each stack
+	 * @return Map generated discard zone
+	 * */
 	private Map<FireworkColor, ArrayList<Integer>> generateDiscardZone() {
 		Map<FireworkColor, ArrayList<Integer>> map = new HashMap<FireworkColor, ArrayList<Integer>>();
 		
@@ -85,7 +91,8 @@ public class SimpleGameData {
 		return map;
 	}
 	
-	/** Return a card drawed (removed from the top of the deck). If the deck is empty, we can't draw and return a null (no card) */
+	/** Return a card drawed (removed from the top of the deck). If the deck is empty, we can't draw and return a null (no card) 
+	 * @return Card card drawed*/
 	public Card draw() {
 		if (deck.size()<=0) {
 			System.out.println("Deck vide, pioche impossible !");
@@ -95,44 +102,52 @@ public class SimpleGameData {
 		return deck.remove(0);
 	}
 	
-	/** Check if the current game is on it's last turn by checking if the deck is empty. If it is, we are in the last turn.*/
+	/** Check if the current game is on it's last turn by checking if the deck is empty. If it is, we are in the last turn.
+	 * @return boolean true if last turn, false if not*/
 	public boolean lastTurn() {
 		if (deck.size() == 0)
 			return true;
 		return false;
 	}
 	
-	/** Returns the number of red tokens availables */
+	/** Returns the number of red tokens availables 
+	 * @return int number of red tokens*/
 	public int getRedTokens() {
 		return redTokens;
 	}
 
-	/** Returns the number of blue tokens availables*/
+	/** Returns the number of blue tokens availables
+	 * @return int number of blue tokens*/
 	public int getBlueTokens() {
 		return blueTokens;
 	}
 
-	/** */
+	/** Returns the deck
+	 * @return ArrayList the deck*/
 	public ArrayList<Card> getDeck() {
 		return deck;
 	}
 
-	/** Returns the field */
+	/** Returns the field 
+	 * @return Map the field*/
 	public Map<FireworkColor, Integer> getField() {
 		return field;
 	}
 
-	/** Return the discard zone */
+	/** Return the discard zone
+	 * @return Map the discard zone*/
 	public Map<FireworkColor, ArrayList<Integer>> getDiscardZone() {
 		return discardZone;
 	}
 
-	/** Return a list with all players*/
+	/** Return a list with all players
+	 * @return List list of all players*/
 	public List<Player> getPlayers() {
 		return players;
 	}
 
-	/** Add a player to the data's list of players*/
+	/** Add a player to the data's list of players
+	 * @param player player added*/
 	public void addPlayer(Player player) {
 		this.players.add(player);
 	}
@@ -155,7 +170,8 @@ public class SimpleGameData {
 			this.redTokens++;
 	}
 
-	/** If all stack of cards is complete (the top card of all stacks is 5), returns true*/
+	/** If all stack of cards is complete (the top card of all stacks is 5), returns true
+	 * @return boolean true if set complete, false if not*/
 	public boolean isSetComplete() {
 		for (FireworkColor c : field.keySet()) {
 			if (field.get(c) != 5)
@@ -164,7 +180,8 @@ public class SimpleGameData {
 		return true;
 	}
 	
-	/** returns the score of the field*/
+	/** returns the score of the field
+	 * @return int Final score*/
 	public int score() {
 		int score = 0;
 		for (FireworkColor c : field.keySet()) {
@@ -173,12 +190,14 @@ public class SimpleGameData {
 		return score;
 	}
 	
-	/** Plays a card on the field*/
+	/** Plays a card on the field
+	 * @param c Card player to the field*/
 	public void addToField(Card c) {
 		field.put(c.getColor(), c.getValue());
 	}
 
-	/** Discard a card by giving its value to the right color stack*/
+	/** Discard a card by giving its value to the right color stack
+	 * @param c Discarded card*/
 	public void addToDiscardZone(Card c) {
 		ArrayList<Integer> itemsList = discardZone.get(c.getColor());
         itemsList.add(c.getValue());
@@ -186,12 +205,14 @@ public class SimpleGameData {
 	}
 
 	/** Returns the list of players without the player given as arguments
-	 * @param player - the player which should not appear in the list*/
+	 * @param player - the player which should not appear in the list
+	 * @return List The list of players without the player in parameter*/
 	public List<Player> getListWithoutPlayer(Player player) {
 		return getPlayers().stream().filter(p -> !p.getName().equals(player.getName())).collect(Collectors.toList());
 	}
 
-	/** Return the number of the current turn */
+	/** Return the number of the current turn 
+	 * @return int number of turn*/
 	public int getNbTurns() {
 		return turn;
 	}

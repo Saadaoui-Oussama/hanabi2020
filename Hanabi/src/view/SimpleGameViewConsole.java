@@ -8,10 +8,14 @@ public class SimpleGameViewConsole {
 	
 	private SimpleGameData data;
 	
+	/** Creates the view of the game (console)
+	 * @param data - SimpleGameData of the game */
 	public SimpleGameViewConsole(SimpleGameData data) {
 		this.data = data;
 	}
 	
+	/** Shows all informations for the player turn: field, discard zone, his hand and other players hands
+	 * @param player Player which has the view */
 	public void showInformations(Player player) {
 		System.out.println("Tour n°"+data.getNbTurns());
 		if (data.lastTurn())
@@ -31,6 +35,9 @@ public class SimpleGameViewConsole {
 		showDiscardZone();
 	}
 	
+	/**
+	 * Shows the field
+	 */
 	public void showField() {
 		System.out.println("Field:");
 		
@@ -39,6 +46,9 @@ public class SimpleGameViewConsole {
 		}
 	}
 	
+	/**
+	 * Shows the discard zone
+	 */
 	public void showDiscardZone() {
 		System.out.println("Discard zone:");
 		
@@ -51,8 +61,11 @@ public class SimpleGameViewConsole {
 		}
 	}
 	
-	public void showScore() {
-		int scoreFinal = data.score();
+	/**
+	 * Shows the final score of the players
+	 * @param scoreFinal calculated score
+	 */
+	public void showScore(int scoreFinal) {
 		System.out.println("Calcul du score: "+scoreFinal);
 
 		if (scoreFinal <= 5)
@@ -71,6 +84,9 @@ public class SimpleGameViewConsole {
 		System.out.println("A bientôt !");
 	}
 
+	/**
+	 * Prints a defeat phrase
+	 */
 	public void showDefeat() {
 		System.out.println("Vous avez PERDU");
 	}
