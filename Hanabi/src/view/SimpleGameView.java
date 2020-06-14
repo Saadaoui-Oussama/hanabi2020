@@ -131,8 +131,8 @@ public class SimpleGameView {
 		YPlayerOrigin = height-(height/4);
 		String str = "";
 		List<Player> list = data.getPlayers();
-		float X = height-(height/4)+50;
-		float Y = XPlayerOrigin;
+		float X = XPlayerOrigin;
+		float Y = height-(height/4)+50;
 		
     		for(Player pl : list) {
     			X = XPlayerOrigin;
@@ -149,50 +149,51 @@ public class SimpleGameView {
 	}
 	
 	private void drawCard(Graphics2D graphics, List<Card> hand, float X, float Y) {
-			float XCard = X;
+			float XCard = X+5;
 			float YCard = Y;
+			float widthCard = width/5/5;
 			for(Card cd : hand) {
 				
 				switch(cd.getColor()) {
 				
 				case white:
 					graphics.setColor(Color.WHITE);
-					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+60;
+					XCard = XCard+widthCard;
 					break;
 				
 				case blue:
 					graphics.setColor(Color.BLUE);
-					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+60;
+					XCard = XCard+widthCard;
 					break;
 				
 				case yellow:
 					graphics.setColor(Color.YELLOW);
-					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+60;
+					XCard = XCard+widthCard;
 					break;
 					
 				case red:
 					graphics.setColor(Color.RED);
-					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+60;
+					XCard = XCard+widthCard;
 					break;
 					
 				case green:
 					graphics.setColor(Color.GREEN);
-					graphics.draw(new Rectangle.Float(XCard+40, YCard-40, 50, 100));
+					graphics.draw(new Rectangle.Float(XCard, YCard-40, 50, 100));
 					graphics.setFont(graphics.getFont().deriveFont((float) 25.0));
 					graphics.drawString(String.valueOf(cd.getValue()), XCard+60, YCard);
-					XCard = XCard+60;
+					XCard = XCard+widthCard;
 					break;
 				}
 			}
