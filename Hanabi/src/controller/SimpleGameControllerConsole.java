@@ -36,24 +36,29 @@ public class SimpleGameControllerConsole {
 			data.addPlayer(p);
 		}
 		
-		// Boucle du jeu
-		while (data.getRedTokens() != 3 && !data.isSetComplete()) {
-			System.out.println("Tour n°"+data.getNbTurns());
-			
-			for (Player p : data.getPlayers()) {
-				turn(p);
-			}
-			
-			data.addCountTurns();
-			if (data.lastTurn())
-				break;
-		}
+		gameloop();
 		
 		if (data.getRedTokens() == 3) 
 			view.showDefeat();
 		else {
 			view.showScore();
 		}
+	}
+	
+	/** The game loop. Breaks when the player completes all sets, loses, or if the deck is empty after the last turn */
+	public void gameloop() {
+		// Boucle du jeu
+			while (data.getRedTokens() != 3 && !data.isSetComplete()) {
+				System.out.println("Tour n°"+data.getNbTurns());
+				
+				for (Player p : data.getPlayers()) {
+					turn(p);
+				}
+				
+				data.addCountTurns();
+				if (data.lastTurn())
+					break;
+			}
 	}
 
 	/** Let the player in arguments plays his turn (give a intel to another player, play a card or discard a card)*/

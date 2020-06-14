@@ -1,28 +1,18 @@
 package controller;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.List;
 import java.util.Scanner;
 
-import fr.umlv.zen5.Application;
-import fr.umlv.zen5.ApplicationContext;
-import fr.umlv.zen5.Event;
-import fr.umlv.zen5.Event.Action;
-import fr.umlv.zen5.KeyboardKey;
-import model.Card;
+import model.*;
 import model.Player;
 import model.SimpleGameData;
 import view.SimpleGameView;
-import view.SimpleGameView_BACK;
 
 public class SimpleGameController {
 	
 	private SimpleGameData data;
 	private SimpleGameView view;
 	private Scanner saisie;
-	
-	private int nbTours = 1; // Repère de tour
 	
 	public void start() {
 		System.out.println("Bienvenue sur Hanabi !");
@@ -31,10 +21,11 @@ public class SimpleGameController {
 		int nbPlayers = 0;
 		do {
 			System.out.println(" Veuillez entrer le nombre de joueurs (2 à 5 joueurs): ");
-			nbPlayers = saisie.nextInt();
+			nbPlayers = inputNumber();
 		} while (nbPlayers < 2 || nbPlayers > 5);
 		
 		data = new SimpleGameData();
+		view = new SimpleGameView(null);
 		
 		// 4 cartes si 4 à 5 joueurs, 5 cartes si 2 à 3 joueurs
 		int handSize = (nbPlayers > 3)? 4: 5;
@@ -45,71 +36,40 @@ public class SimpleGameController {
 			data.addPlayer(p);
 		}
 		
-		Application.run(Color.GRAY, context -> {
-	        SimpleGameView view = new SimpleGameView(context);
-	        view.showField(data);
-	        view.showMenu();
-	        view.showDiscardZone(data);
-	        view.showPlayer(data);
-	        mainLoop(view, data, context);   
-	    });
-	}
+		gameloop();
 		
-		private void mainLoop(SimpleGameView view, SimpleGameData data, ApplicationContext context) {
-			// Boucle du jeu
-			while (data.getRedTokens() != 3 && !data.isSetComplete()) {
-				System.out.println("Tour n°"+nbTours);
-				view.showTurn(nbTours);
-				view.showTokens(data);
-				for (Player p : data.getPlayers()) {
-					//view.clearWin(context);
-					
-					view.showTurnName(p.getName());
-					turn(p);
-					if (data.lastTurn())
-						break;
-				}
-				nbTours++;
-				if (data.lastTurn())
-					break;
-				}
-				endGame();
-			}
-
-	private void endGame() {
 		if (data.getRedTokens() == 3) 
-			System.out.println("Vous avez PERDU");
+			view.printLose();
 		else {
-			int scoreFinal = data.score();
-			System.out.println("Calcul du score: "+scoreFinal);
-	
-			if (scoreFinal <= 5)
-				System.out.println("Horrible, huées de la foule...");
-			else if (scoreFinal >= 6 && scoreFinal <= 10)
-				System.out.println("Médiocre, à peine quelques applaudissements.");
-			else if (scoreFinal >= 11 && scoreFinal <= 15)
-				System.out.println("Honorable, mais ne restera  pas dans les mémoires...");
-			else if(scoreFinal >= 16 && scoreFinal <= 20)
-				System.out.println("Excellente, ravit la foule.");
-			else if(scoreFinal >= 21 && scoreFinal <= 24)
-				System.out.println("Extraordinaire, restera gravée dans les mémoires !");
-			else
-				System.out.println("Légendaire, petits et grands sans voix,  des étoiles dans les yeux");
-			
-			System.out.println("A bientôt !");
+			view.printWin();
 		}
 	}
+	
+	/** The game loop. Breaks when the player completes all sets, loses, or if the deck is empty after the last turn */
+	public void gameloop() {
+		// Boucle du jeu
+			while (data.getRedTokens() != 3 && !data.isSetComplete()) {
+				System.out.println("Tour n°"+data.getNbTurns());
+				
+				for (Player p : data.getPlayers()) {
+					turn(p);
+				}
+				
+				data.addCountTurns();
+				if (data.lastTurn())
+					break;
+			}
+	}
 
+	/** Let the player in arguments plays his turn (give a intel to another player, play a card or discard a card)*/
 	private void turn(Player player) {
-		
-		
 		
 		int choice = 0;
 		do {
 			System.out.println("1. Donner un indice | 2. Jouer une carte | 3. Défausser une carte");
-			choice = saisie.nextInt();
+			choice = inputNumber();
 			
-			if (choice == 1 && data.getBlueTokens() == 0) {
+			if (choice == 1 && data.getBlueTokens() == 0) { // If no blue tokens are available, the player can't give an intel
 				System.out.println("Pas assez de jetons pour donner un indice");
 				choice = 0;
 			}
@@ -135,30 +95,14 @@ public class SimpleGameController {
 		cleanConsole();
 	}
 
-	/** Fonction très "cheap" pour nettoyer la console à chaque nouveau tour pendant la partie */
+	/** Very cheap function to clean the console for each player's turn */
 	private void cleanConsole() {
 		for (int i = 0; i < 50; i++)
 			System.out.println();
 	}
 
-	private void showInformations(Player player) {
-		if (data.lastTurn())
-			System.out.println("LAST TURN !");
-		System.out.println("A ton tour, "+player.getName());
-		System.out.println("Jetons bleus: "+data.getBlueTokens());
-		System.out.println("Jetons rouges: "+data.getRedTokens());
-		System.out.println("Cartes restantes: "+data.getDeck().size());
-		
-		// Main des joueurs
-		System.out.println(player.toString());
-		for (Player p : data.getListWithoutPlayer(player))
-			System.out.println(p.openHand());
-		
-		// Affichage du terrain et de la défausse (fonctions de test - à mieux redéfinir pour phase 3 ?) TODO
-		view.showField(data);
-		view.showDiscardZone(data);
-	}
-
+	/** Let the player in argument give an intel to another player 
+	 * @param player - player who's doing the action*/
 	private void actionGiveIntel(Player player) {
 		int playerSaisie = 0;
 		// On veut travailler avec une liste ou il n'y a pas le joueur actuel (on ne peut pas se donner un indice)
@@ -172,7 +116,7 @@ public class SimpleGameController {
 				System.out.println((i+1)+". "+pIntel.openHand());
 			}
 			
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie <1 || playerSaisie > l.size());
 		
 		playerSaisie--; // On décrémente car on a affiché i+1 pour la sélection
@@ -184,7 +128,7 @@ public class SimpleGameController {
 		System.out.println("Indice de couleur ou de valeur ?");
 		do {
 			System.out.println("1. Indice de couleur | 2. Indice de valeur");
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie != 1 && playerSaisie != 2);
 		
 		int intelChoice = playerSaisie;
@@ -195,7 +139,7 @@ public class SimpleGameController {
 			for (int i = 0; i < playerChoice.getHand().size(); i++) {
 				System.out.println((i+1)+". "+playerChoice.getCardInHand(i).openCard());
 			}
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie < 1 || playerSaisie > playerChoice.getHand().size());
 		
 		playerSaisie--;
@@ -210,6 +154,8 @@ public class SimpleGameController {
 		data.removeBlueToken();
 	}
 	
+	/** Let the player choose a card and play it on the field. If the card is incorrect, the card is instead discarded and a red tokken is added
+	 * @param player - player who's doing the action */
 	private void actionPlayCard(Player player) {
 		int playerSaisie = 0;
 		do {
@@ -217,7 +163,7 @@ public class SimpleGameController {
 			for (int i = 0; i < player.getHand().size(); i++) {
 				System.out.println((i+1)+". "+player.getCardInHand(i));
 			}
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie < 1 || playerSaisie > player.getHand().size());
 		
 		playerSaisie--;
@@ -238,6 +184,8 @@ public class SimpleGameController {
 		
 	}
 	
+	/** Let the player choose a card and discard it. The players gain a blue tokken by doing this.
+	 * @param player - player who's doing the action */
 	private void actionDiscardCard(Player player) {
 		int playerSaisie = 0;
 		do {
@@ -245,7 +193,7 @@ public class SimpleGameController {
 			for (int i = 0; i < player.getHand().size(); i++) {
 				System.out.println((i+1)+". "+player.getCardInHand(i));
 			}
-			playerSaisie = saisie.nextInt();
+			playerSaisie = inputNumber();
 		} while (playerSaisie < 1 || playerSaisie > player.getHand().size());
 		
 		playerSaisie--;
@@ -254,6 +202,8 @@ public class SimpleGameController {
 		player.addCard(data.draw());
 	}
 
+	/** Create and return a new player by asking his name
+	 * @param handSize - size of the hand (depending on the total numbers of players) */
 	private Player createPlayer(int handSize) {
 		String nom;
 		boolean correct_name;
@@ -272,6 +222,24 @@ public class SimpleGameController {
 		} while (nom.isBlank() || !correct_name);
 		
 		return new Player(nom, data, handSize);
+	}
+	
+	/** let the user input his integer choice. If the input is not an integer, this function returns 0, which forces the input loop to cycle back.
+	 *  @return The number inputted if the input is correct, 0 if it's not*/
+	private int inputNumber() {
+		String input = saisie.nextLine();
+		int numericInput = 0;
+		if (input.isEmpty())
+			return 0;
+		
+		try {
+			numericInput = Integer.parseInt(input);
+		}
+		catch(Exception e) {
+			return 0;
+		}
+		
+		return numericInput;
 	}
 
 }
