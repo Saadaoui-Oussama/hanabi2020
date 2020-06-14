@@ -3,7 +3,7 @@ package controller;
 import java.util.List;
 import java.util.Scanner;
 
-import model.Card;
+import model.*;
 import model.Player;
 import model.SimpleGameData;
 import view.SimpleGameViewConsole;
@@ -13,8 +13,6 @@ public class SimpleGameControllerConsole {
 	private SimpleGameData data;
 	private SimpleGameViewConsole view;
 	private Scanner saisie;
-	
-	private int nbTours = 1; // Repère de tour
 	
 	public void start() {
 		System.out.println("Bienvenue sur Hanabi !");
@@ -40,13 +38,13 @@ public class SimpleGameControllerConsole {
 		
 		// Boucle du jeu
 		while (data.getRedTokens() != 3 && !data.isSetComplete()) {
-			System.out.println("Tour n°"+nbTours);
+			System.out.println("Tour n°"+data.getNbTurns());
 			
 			for (Player p : data.getPlayers()) {
 				turn(p);
 			}
 			
-			nbTours++;
+			data.addCountTurns();
 			if (data.lastTurn())
 				break;
 		}

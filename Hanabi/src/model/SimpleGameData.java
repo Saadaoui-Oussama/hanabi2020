@@ -18,6 +18,8 @@ public class SimpleGameData {
 	private Map<FireworkColor, Integer> field;
 	private Map<FireworkColor, ArrayList<Integer>> discardZone;
 	
+	private int turn = 1; // Repère de tour
+	
 	
 	/** Creates all the game's data: the deck, a list of players, the field, the discard zone, and the blue and red tokens **/
 	public SimpleGameData() {
@@ -39,22 +41,25 @@ public class SimpleGameData {
 			for (int i = 1; i <= 5; i++) {
 				switch (i) {
 				case 1:
-					deck.add(new Card(c, i));
-					deck.add(new Card(c, i));
-					deck.add(new Card(c, i));
+					addCardToDeck(deck, c, i, 3);
 					break;
-				case 2, 3, 4: //TODO enable preview à activer
-					deck.add(new Card(c, i));
-					deck.add(new Card(c, i));
+				default: //2, 3, 4
+					addCardToDeck(deck, c, i, 2);
 					break;
 				case 5:
-					deck.add(new Card(c, i));
+					addCardToDeck(deck, c, i, 1);
 					break;
 				}
 			}
 		}
 		Collections.shuffle(deck);
 		return deck;
+	}
+	
+	/** used to generate the deck. Add n times a card with the color and value as argument in the deck */
+	public void addCardToDeck(ArrayList<Card> deck, FireworkColor color, int value, int n) {
+		for (int i = 0; i < n; i++)
+			deck.add(new Card(color, value));
 	}
 	
 	/** Generate a field, which consists of 5 stacks of card of each color, and containing the top value of the stack (starting at 0) */
@@ -183,6 +188,16 @@ public class SimpleGameData {
 	 * @param player - the player which should not appear in the list*/
 	public List<Player> getListWithoutPlayer(Player player) {
 		return getPlayers().stream().filter(p -> !p.getName().equals(player.getName())).collect(Collectors.toList());
+	}
+
+	/** Return the number of the current turn */
+	public int getNbTurns() {
+		return turn;
+	}
+
+	/* Increments the number of turns */
+	public void addCountTurns() {
+		turn++;
 	}
 
 }

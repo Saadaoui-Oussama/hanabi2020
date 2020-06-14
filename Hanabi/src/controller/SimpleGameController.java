@@ -59,12 +59,15 @@ public class SimpleGameController {
 			// Boucle du jeu
 			while (data.getRedTokens() != 3 && !data.isSetComplete()) {
 				System.out.println("Tour n°"+nbTours);
+				
+				
 
 				for (Player p : data.getPlayers()) {
 					turn(p);
 					if (data.lastTurn())
 						break;
 				}
+					
 				nbTours++;
 				if (data.lastTurn())
 					break;
@@ -97,7 +100,9 @@ public class SimpleGameController {
 	}
 
 	private void turn(Player player) {
-
+		
+		
+		
 		int choice = 0;
 		do {
 			System.out.println("1. Donner un indice | 2. Jouer une carte | 3. Défausser une carte");
